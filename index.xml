@@ -1,16 +1,24 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>我的全新 Hugo 网站</title>
-        <link>https://tony-laoshi.github.io/</link>
+        <title>Qi&#39;s Blog</title>
+        <link>http://example.org/</link>
         <description>这是我的全新 Hugo 网站</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 30 Jun 2022 16:54:31 &#43;0800</lastBuildDate>
-            <atom:link href="https://tony-laoshi.github.io/index.xml" rel="self" type="application/rss+xml" />
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 30 Jun 2022 20:40:06 &#43;0800</lastBuildDate>
+            <atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Ubuntu20.04安装LaTeX并配置中文环境</title>
+    <link>http://example.org/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/</link>
+    <pubDate>Thu, 30 Jun 2022 20:40:06 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>http://example.org/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/</guid>
+    <description><![CDATA[简介 Latex是一个基于TEX的排班系统。粘贴复制的话就不搞了。简而言之，通俗来说，就是用来写文章的，而且完全不需要你去花时间去自己考虑排版]]></description>
+</item>
+<item>
     <title>Ubuntu安装卸载基础知识</title>
-    <link>https://tony-laoshi.github.io/ubuntu%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+    <link>http://example.org/ubuntu%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
     <pubDate>Thu, 30 Jun 2022 16:54:31 &#43;0800</pubDate>
-    <author>xxxx</author>
-    <guid>https://tony-laoshi.github.io/ubuntu%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+    <author>Qi</author>
+    <guid>http://example.org/ubuntu%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
     <description><![CDATA[APT软件包管理系统 apt-get install apt一般直接安装已经编译好的可执行文件，会直接帮你处理依赖关系，apt-get install安装目录是包的维护者确]]></description>
 </item>
 </channel>
