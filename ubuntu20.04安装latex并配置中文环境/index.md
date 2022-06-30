@@ -27,12 +27,13 @@ Latex是一个基于TEX的排班系统。粘贴复制的话就不搞了。简而
 <br />
 
 # 其他工具和资源
-## Mathpix
+### Mathpix
+
 在写论文或者文档的时候，经常会碰到要输入数学公式的情况。如果去手敲，效率很低。这里介绍一个数学公式的latex语句生成工具 [Mathpix](https://standard-robots.yuque.com/dvszm5/khqrwm/rwgsu7)。 碰到文献里的数学公式，只需要用这个软件，就可以轻松获得这个公式的latex语句。
 
 <br />
 
-## 模板
+### 模板
 模板这里分享一个latex模板网站  [模板](https://www.latextemplates.com/)
 
 

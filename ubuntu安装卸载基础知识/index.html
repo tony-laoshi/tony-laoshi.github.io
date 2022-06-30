@@ -112,14 +112,8 @@
                     <span>Contents</span>
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
-  <ul>
-    <li><a href="#apt软件包管理系统">APT软件包管理系统</a></li>
-    <li><a href="#源码">源码</a></li>
-    <li><a href="#dpkg">DPKG</a></li>
-  </ul>
-</nav></div>
-            </div><div class="content" id="content"><h2 id="apt软件包管理系统">APT软件包管理系统</h2>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+            </div><div class="content" id="content"><h1 id="apt软件包管理系统">APT软件包管理系统</h1>
 <p><code>apt-get install</code> apt一般直接安装已经编译好的可执行文件，会直接帮你处理依赖关系，<code>apt-get install</code>安装目录是包的维护者确定的，不是用户。系统安装软件一般在<code>/usr/share</code>，可执行的文件在<code>/usr/bin</code>，配置文件可能安装到了<code>/etc</code>下等。</p>
 <p><br /><code>apt-get remove</code> 卸载已安装的软件包（保留配置文件）
 <br /><code>apt-get remove -purge </code> 卸载已安装的软件包同时删除配置文件
@@ -132,7 +126,7 @@
 <br />
 <br />
 <br />
-<h2 id="源码">源码</h2>
+<h1 id="源码">源码</h1>
 <p>这种软件包里面都是源程序，没有编译过，经过编译后才能安装。源码安装大致可以分为三步:<strong>（./configure）–＞ 编译（sudo make） –＞ 安装（sudo make install）</strong></p>
 <ol>
 <li>配置：这是编译源代码的第一步，通过<code> ./configure</code> 命令完成。执行此步以便为编译源代码作准备。常用的选项有 <code>--prefix=PREFIX</code>，用以指定程序的安装位置。更多的选项可通过 <code>--help</code> 查询。也有某些程序无需执行此步。如果配置了&ndash;prefix，如：<code>./configure --prefix=/usr/local/test</code>安装后的所有资源文件都会被放在/usr/local/test目录中，不会分散到其他目录。</li>
@@ -149,7 +143,7 @@
 <br />
 <br />
 <br />
-<h2 id="dpkg">DPKG</h2>
+<h1 id="dpkg">DPKG</h1>
 <p>Ubuntu系统中，软件通常以<code>.deb</code>格式的包文件发布，它是一种预编译软件包。deb包中除了包含已编译的软件，通常还包括软件的拷贝路径、对其他软件包的依赖关系记录、一个比较通用的配置文件以及软件的描述、版本、作者、类别、占用空间等信息。针对<code>dpkg</code>来说，它只能安装一个<code>.deb</code>格式的包，同时会通知你安装这个包需要什么样的依赖，但是不会安装那些依赖文件，同时也对这个包进行配置，因为那些依赖包并没有下载安装。</p>
 <p>deb软件包命令遵行如下约定： <code>**soft_ver_rev_arch.deb**</code>soft为软件包名，ver为版本号，rev为Ubuntu修订版本号，arch为目标架构名称</p>
 <p><br /> <code>dpkg -i | --install xxx.deb</code> 安装deb安装包
