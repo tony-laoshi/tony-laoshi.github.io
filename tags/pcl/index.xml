@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>PCL - Tag - Qi&#39;s Blog</title>
+        <link>https://tony-laoshi.github.io/tags/pcl/</link>
+        <description>PCL - Tag - Qi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 14 Jul 2022 15:25:06 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/tags/pcl/" rel="self" type="application/rss+xml" /><item>
+    <title>Ubuntu20.04安装PCL库</title>
+    <link>https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/</link>
+    <pubDate>Thu, 14 Jul 2022 15:25:06 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/</guid>
+    <description><![CDATA[前言 pcl库的编译安装真心让人想吐，运气好一次通过，运气不好（各种环境的、各种依赖的问题）两三天就过去了。在这里分享下我安装pcl所遇到的问]]></description>
+</item>
+</channel>
+</rss>

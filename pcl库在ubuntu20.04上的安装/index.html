@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Ubuntu20.04安装PCL库 - Qi&#39;s Blog</title><meta name="Description" content="这是 Qi 的blog"><meta property="og:title" content="Ubuntu20.04安装PCL库" />
+<meta property="og:description" content="前言 pcl库的编译安装真心让人想吐，运气好一次通过，运气不好（各种环境的、各种依赖的问题）两三天就过去了。在这里分享下我安装pcl所遇到的问" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" /><meta property="og:image" content="https://tony-laoshi.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-14T15:25:06+08:00" />
+<meta property="article:modified_time" content="2022-07-14T15:25:06+08:00" /><meta property="og:site_name" content="Qi&#39;s Blog" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tony-laoshi.github.io/logo.png"/>
+
+<meta name="twitter:title" content="Ubuntu20.04安装PCL库"/>
+<meta name="twitter:description" content="前言 pcl库的编译安装真心让人想吐，运气好一次通过，运气不好（各种环境的、各种依赖的问题）两三天就过去了。在这里分享下我安装pcl所遇到的问"/>
+<meta name="application-name" content="我的网站">
+<meta name="apple-mobile-web-app-title" content="我的网站"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" /><link rel="prev" href="https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Ubuntu20.04安装PCL库",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/tony-laoshi.github.io\/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85\/"
+        },"genre": "posts","keywords": "PCL, Linux","wordcount":  2413 ,
+        "url": "https:\/\/tony-laoshi.github.io\/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85\/","datePublished": "2022-07-14T15:25:06+08:00","dateModified": "2022-07-14T15:25:06+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Qi"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Qi&#39;s Blog">HOME</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Qi&#39;s Blog">HOME</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Ubuntu20.04安装PCL库</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Qi</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>软件安装</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-07-14">2022-07-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2413 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装依赖">安装依赖</a></li>
+    <li><a href="#安装pcl">安装PCL</a></li>
+    <li><a href="#测试">测试</a>
+      <ul>
+        <li><a href="#编写源文件">编写源文件</a></li>
+        <li><a href="#编写cmakeliststxt">编写CMakeLists.txt</a></li>
+        <li><a href="#编译安装运行">编译安装运行</a></li>
+        <li><a href="#正常运行结果">正常运行结果</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#安装pcl依赖">安装PCL依赖</a></li>
+    <li><a href="#安装vtk">安装VTK</a>
+      <ul>
+        <li><a href="#安装vtk依赖">安装vtk依赖</a></li>
+        <li><a href="#下载vtk">下载vtk</a></li>
+        <li><a href="#编译安装">编译安装</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装pcl-1">安装PCL</a></li>
+    <li><a href="#测试-1">测试</a></li>
+    <li><a href="#遇到的问题">遇到的问题</a>
+      <ul>
+        <li><a href="#问题1">问题1</a>
+          <ul>
+            <li><a href="#解决方案">解决方案</a></li>
+          </ul>
+        </li>
+        <li><a href="#问题2">问题2</a>
+          <ul>
+            <li><a href="#解决方案-1">解决方案</a></li>
+          </ul>
+        </li>
+        <li><a href="#问题3">问题3</a>
+          <ul>
+            <li><a href="#解决方案-2">解决方案</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="前言">前言</h1>
+<p>pcl库的编译安装真心让人想吐，运气好一次通过，运气不好（各种环境的、各种依赖的问题）两三天就过去了。在这里分享下我安装pcl所遇到的问题。</p>
+<h1 id="通过sudo-apt-安装">通过sudo apt 安装</h1>
+<p>通过这种方式安装的最大的好处就是简单且不容易出现编译安装的问题，缺点就是可能会有部分功能无法使用</p>
+<h2 id="安装依赖">安装依赖</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get update
+</span></span><span class="line"><span class="cl">sudo apt-get install git build-essential linux-libc-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install cmake cmake-gui
+</span></span><span class="line"><span class="cl">sudo apt-get install libusb-1.0-0-dev libusb-dev libudev-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install mpi-default-dev openmpi-bin openmpi-common
+</span></span><span class="line"><span class="cl">sudo apt-get install libflann1.9 libflann-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install libeigen3-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install libboost-all-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install libqhull* libgtest-dev  
+</span></span><span class="line"><span class="cl">sudo apt-get install freeglut3-dev pkg-config  
+</span></span><span class="line"><span class="cl">sudo apt-get install libxmu-dev libxi-dev   
+</span></span><span class="line"><span class="cl">sudo apt-get install mono-complete   
+</span></span><span class="line"><span class="cl">sudo apt-get install libopenni-dev   
+</span></span><span class="line"><span class="cl">sudo apt-get install libopenni2-dev 
+</span></span><span class="line"><span class="cl">sudo apt-get install libvtk7-dev libvtk6-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install qt5-default
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装pcl">安装PCL</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install libpcl-dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>至此，PCL库的安装和配置就算是完成了，接下来测试一下PCL库是否可以正常运行</p>
+<h2 id="测试">测试</h2>
+<h3 id="编写源文件">编写源文件</h3>
+<p>写个测试用的源文件 test.cpp （网上copy的）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;pcl/common/common_headers.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;pcl/io/pcd_io.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;pcl/visualization/pcl_visualizer.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;pcl/visualization/cloud_viewer.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;pcl/console/parse.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Test PCL !!!&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">pcl</span><span class="o">::</span><span class="n">PointCloud</span><span class="o">&lt;</span><span class="n">pcl</span><span class="o">::</span><span class="n">PointXYZRGB</span><span class="o">&gt;::</span><span class="n">Ptr</span> <span class="n">point_cloud_ptr</span> <span class="p">(</span><span class="k">new</span> <span class="n">pcl</span><span class="o">::</span><span class="n">PointCloud</span><span class="o">&lt;</span><span class="n">pcl</span><span class="o">::</span><span class="n">PointXYZRGB</span><span class="o">&gt;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span> <span class="n">r</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">g</span><span class="p">(</span><span class="mi">15</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">z</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">);</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">;</span> <span class="n">z</span> <span class="o">+=</span> <span class="mf">0.05</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">angle</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span> <span class="n">angle</span> <span class="o">&lt;=</span> <span class="mf">360.0</span><span class="p">;</span> <span class="n">angle</span> <span class="o">+=</span> <span class="mf">5.0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pcl</span><span class="o">::</span><span class="n">PointXYZRGB</span> <span class="n">point</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">point</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cosf</span> <span class="p">(</span><span class="n">pcl</span><span class="o">::</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">angle</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="n">point</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">sinf</span> <span class="p">(</span><span class="n">pcl</span><span class="o">::</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">angle</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="n">point</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">uint32_t</span> <span class="n">rgb</span> <span class="o">=</span> <span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span> <span class="o">|</span>
+</span></span><span class="line"><span class="cl">                            <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="o">|</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">b</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="n">point</span><span class="p">.</span><span class="n">rgb</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rgb</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">point_cloud_ptr</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">.</span><span class="n">push_back</span> <span class="p">(</span><span class="n">point</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">z</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span> <span class="o">-=</span> <span class="mi">12</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">g</span> <span class="o">+=</span> <span class="mi">12</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">g</span> <span class="o">-=</span> <span class="mi">12</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">b</span> <span class="o">+=</span> <span class="mi">12</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">point_cloud_ptr</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">point_cloud_ptr</span><span class="o">-&gt;</span><span class="n">points</span><span class="p">.</span><span class="n">size</span> <span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">point_cloud_ptr</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">pcl</span><span class="o">::</span><span class="n">visualization</span><span class="o">::</span><span class="n">CloudViewer</span> <span class="n">viewer</span> <span class="p">(</span><span class="s">&#34;test&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">viewer</span><span class="p">.</span><span class="n">showCloud</span><span class="p">(</span><span class="n">point_cloud_ptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">viewer</span><span class="p">.</span><span class="n">wasStopped</span><span class="p">()){</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="编写cmakeliststxt">编写CMakeLists.txt</h3>
+<p>在目录下创建TestPCL文件夹，用于存储测试项目的文件，将test.cpp和CMakeLists.txt存储至TestPCL文件夹，创建TestPCL/bulid文件夹以储存中间文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.6</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">TEST</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">PCL</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PCL_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">link_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">PCL_LIBRARY_DIRS</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">PCL_DEFINITIONS</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">TEST</span> <span class="s">test.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span> <span class="p">(</span><span class="s">TEST</span> <span class="o">${</span><span class="nv">PCL_LIBRARIES</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">TEST</span> <span class="s">RUNTIME</span> <span class="s">DESTINATION</span> <span class="s">bin</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="编译安装运行">编译安装运行</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> build
+</span></span><span class="line"><span class="cl">cmake ..
+</span></span><span class="line"><span class="cl">make
+</span></span><span class="line"><span class="cl">./TEST
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="正常运行结果">正常运行结果</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/posts/Ubuntu20.04%e5%ae%89%e8%a3%85PCL%e5%ba%93/test_result.png"
+        data-srcset="/posts/Ubuntu20.04%e5%ae%89%e8%a3%85PCL%e5%ba%93/test_result.png, /posts/Ubuntu20.04%e5%ae%89%e8%a3%85PCL%e5%ba%93/test_result.png 1.5x, /posts/Ubuntu20.04%e5%ae%89%e8%a3%85PCL%e5%ba%93/test_result.png 2x"
+        data-sizes="auto"
+        alt="/posts/Ubuntu20.04安装PCL库/test_result.png"
+        title="result" /></p>
+<h1 id="通过源码安装">通过源码安装</h1>
+<h2 id="安装pcl依赖">安装PCL依赖</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get update
+</span></span><span class="line"><span class="cl">sudo apt-get install git build-essential linux-libc-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install cmake cmake-gui
+</span></span><span class="line"><span class="cl">sudo apt-get install libusb-1.0-0-dev libusb-dev libudev-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install mpi-default-dev openmpi-bin openmpi-common
+</span></span><span class="line"><span class="cl">sudo apt-get install libflann1.9 libflann-dev <span class="c1"># 有说ubuntu16对应1.8，ubuntu18对应1.9，我直接用了1.9</span>
+</span></span><span class="line"><span class="cl">sudo apt-get install libeigen3-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install libboost-all-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install libqhull* libgtest-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install freeglut3-dev pkg-config
+</span></span><span class="line"><span class="cl">sudo apt-get install libxmu-dev libxi-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install mono-complete
+</span></span><span class="line"><span class="cl">sudo apt-get install libopenni-dev
+</span></span><span class="line"><span class="cl">sudo apt-get install libopenni2-dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装vtk">安装VTK</h2>
+<h3 id="安装vtk依赖">安装vtk依赖</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#首先安装VTK的依赖：X11，OpenGL；cmake和cmake-gui在安装pcl依赖的时候安装过了的话可以跳过</span>
+</span></span><span class="line"><span class="cl">sudo apt-get install libx11-dev libxext-dev libxtst-dev libxrender-dev libxmu-dev libxmuu-dev
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#OpenGL</span>
+</span></span><span class="line"><span class="cl">sudo apt-get install build-essential libgl1-mesa-dev libglu1-mesa-dev
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#cmake &amp;&amp; cmake-gui</span>
+</span></span><span class="line"><span class="cl">sudo apt-get install cmake cmake-gui
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="下载vtk">下载vtk</h3>
+<p><strong>官网下载链接：</strong><a href="https://vtk.org/download/" target="_blank" rel="noopener noreffer ">Download | VTK</a>
+这里要注意以下VTK 和 PCL 版本之间的兼容性。我不确切肯定有版本兼容的问题，只是在我尝试了不同VTK版本后，发现VTK版本和PCL的版本还是有一定要求的。最好安装两者的版本如下（自己尝试过）:</p>
+<table>
+<thead>
+<tr>
+<th>ubuntu版本呢</th>
+<th>pcl 版本</th>
+<th>vtk版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18.04 / 20.04</td>
+<td>1.9.1</td>
+<td>8.2.0</td>
+</tr>
+<tr>
+<td>18.04 / 20.04</td>
+<td>1.8.1</td>
+<td>7.1.1</td>
+</tr>
+<tr>
+<td>16.04</td>
+<td>1.7.2</td>
+<td>5.10.1 /6.2.0</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/PointCloudLibrary/pcl/releases" target="_blank" rel="noopener noreffer ">
+</a></p>
+<h3 id="编译安装">编译安装</h3>
+<p>下载完成之后解压到准备好的安装目录，再通过终端打开 cmake GUI 模式</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cmake-gui
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在cmake-gui中：</p>
+<ol>
+<li>配置<code> where is the source code</code> 为VTK-8.2.0所在目录。（然后在VTK-8.2.0所在目录下新建一个build文件夹）</li>
+<li>配置 <code>where to build the binaries </code>为VTK-8.2.0下的build文件夹</li>
+<li>点击<code>Configure</code>，（用“Unix Makefiles”就可以）。配置完成后，显示“Configuring done”</li>
+<li>勾选<code>VTK-Group-Qt</code>，<code>VTK_QT_VERSION</code>选为5，再点击<code>Configure</code>，配置完成后，显示“Configuring done”</li>
+<li>点击<code>Generate</code>，显示“Generating done”，在build文件夹下生成工程文件</li>
+<li>推出cmake-gui</li>
+</ol>
+<p>在终端里切换到VTK-8.2.0安装目录下的build文件夹</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">make -j4    <span class="c1">#性能好内存大的电脑就用 -j8 吧</span>
+</span></span><span class="line"><span class="cl">sudo make install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装pcl-1">安装PCL</h2>
+<p><strong>官网下载连接：</strong><a href="https://github.com/PointCloudLibrary/pcl/releases" target="_blank" rel="noopener noreffer ">Releases · PointCloudLibrary/pcl</a>
+到PCL的github主页下载需要的版本(这里我下载的1.9.1)，放到准备好的安装目录下。打开终端，进到pcl的安装目录下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir build    
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> build    
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置CMAKE_INSTALL_PREFIX是为了把pcl安装到指定文件夹内，所以这个路径根据自己的情况设置</span>
+</span></span><span class="line"><span class="cl">cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span>/usr/local/pcl-1.9.1 -DCMAKE_TYPE<span class="o">=</span>None .. 
+</span></span><span class="line"><span class="cl">make -j4   <span class="c1">#一样的，根据实际情况调整</span>
+</span></span><span class="line"><span class="cl">sudo make install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="测试-1">测试</h2>
+<p>同上</p>
+<h2 id="遇到的问题">遇到的问题</h2>
+<h3 id="问题1">问题1</h3>
+<p>在make pcl的时候，报错：<code>“/usr/bin/ld: cannot find -lvtkIOMPIImage /usr/bin/ld: cannot find -lvtkIOMPIParallel /usr/bin/ld: cannot find -lvtkFiltersParallelDIY2”</code></p>
+<h4 id="解决方案">解决方案</h4>
+<p>重新编译安装 vtk。在cmake-gui模式下，完成第3步的<code>Configure</code>，然后勾选<code>Advanced</code>，在<code>search</code>中把<code>/usr/bin/ld</code>找不到的<code>vtkIOMPIImage</code>，<code>vtkIOMPIParallel</code>，<code>vtkFiltersParallelDIY2</code>都选上。包括如果出现了类似的问题也可以县看看这里面是否可以选上的。</p>
+<p>再点击<code>Configure</code>，显示“Configuring done”，点击<code>Generate</code>，显示“Generating done”。
+打开终端，完成 <code>make</code>  和  <code>sudo make install</code></p>
+<h3 id="问题2">问题2</h3>
+<p>cmake pcl 的时候，提示<code>Checking for module ‘metslib’ – No package ‘metslib’ found</code></p>
+<h4 id="解决方案-1">解决方案</h4>
+<p>安装metslib（我用的是0.5.3版本）
+下载链接：<a href="https://www.coin-or.org/download/source/metslib/metslib-0.5.3.tgz" target="_blank" rel="noopener noreffer ">https://www.coin-or.org/download/source/metslib/metslib-0.5.3.tgz</a>
+解压后，在metslib-0.53打开命令终端并执行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo sh ./configure
+</span></span><span class="line"><span class="cl">sudo make
+</span></span><span class="line"><span class="cl">sudo make install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>顺利完成安装metslib
+<a href="https://blog.csdn.net/yunluoxiaobin/article/details/103078386" target="_blank" rel="noopener noreffer ">
+</a></p>
+<h3 id="问题3">问题3</h3>
+<p><code>No rule to make target in /usr/lib/x86_64-linux-gnu/libpcl_surface. so **后面的内容不记得了**</code></p>
+<h4 id="解决方案-2">解决方案</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">lcoate libpcl_surface. so
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>/usr/lib/x86_64-linux-gnu/libpcl_surface.so.1.10</code>   结果没有上面说的libpcl_surface. so，这是因为我之前通过sudo apt install libpcl-dev 安装过pcl，所以动态库还保留在那里。 简而言之就是，要在/usr/lib/x86_64-linux-gnu/  找libpcl_surface. so这个动态库。  所以先找到 libpcl_surface. so在哪里</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">whereis libpcl_surface. so
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>libpcl_surface:  /usr/lib/libpcl_surface.so</code> 发现在<code>/usr/lib/</code>这个路径。所以只需要把这个路径下的动态库建立一个软链接到<code>/usr/lib/x86_64-linux-gnu/</code>就行。大概了，还有很多动态库都是这种情况，所以可以使用候补符号一次性解决。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ln -s /usr/lib/libpcl_*.so /usr/lib/x86_64-linux-gnu
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="参考链接">参考链接</h1>
+<p><a href="https://blog.csdn.net/way7486chundan/article/details/110296785?utm_term=%E6%80%8E%E4%B9%88%E5%8D%B8%E8%BD%BDVTK&amp;utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~all~sobaiduweb~default-2-110296785-null-null&amp;spm=3001.4430" target="_blank" rel="noopener noreffer ">二、PLC安装踩坑总结（Ubuntu 16.4+PCL1.8.1+VTK7.1+Qt5.9.9)_way7486chundan的博客-CSDN博客</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-07-14</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" data-title="Ubuntu20.04安装PCL库" data-hashtags="PCL,Linux"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" data-hashtag="PCL"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" data-title="Ubuntu20.04安装PCL库"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" data-title="Ubuntu20.04安装PCL库"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" data-title="Ubuntu20.04安装PCL库"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/pcl/">PCL</a>,&nbsp;<a href="/tags/linux/">Linux</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" class="prev" rel="prev" title="Ubuntu20.04安装LaTeX并配置中文环境"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Ubuntu20.04安装LaTeX并配置中文环境</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.101.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Qi</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
