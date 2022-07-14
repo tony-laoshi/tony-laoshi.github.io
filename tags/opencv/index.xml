@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>opencv - Tag - Qi&#39;s Blog</title>
+        <link>https://tony-laoshi.github.io/tags/opencv/</link>
+        <description>opencv - Tag - Qi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 14 Jul 2022 17:54:27 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/tags/opencv/" rel="self" type="application/rss+xml" /><item>
+    <title>Opencv数据标准化和归一化</title>
+    <link>https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/</link>
+    <pubDate>Thu, 14 Jul 2022 17:54:27 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/</guid>
+    <description><![CDATA[介绍 归一化和标准化都是对数据做变换，将原始的一组数据转换到某个范围或者说到某种状态。在数据处理的时候我们常会碰到如下三种处理： 归一化（Nor]]></description>
+</item>
+</channel>
+</rss>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Opencv数据标准化和归一化 - Qi&#39;s Blog</title><meta name="Description" content="这是 Qi 的blog"><meta property="og:title" content="Opencv数据标准化和归一化" />
+<meta property="og:description" content="介绍 归一化和标准化都是对数据做变换，将原始的一组数据转换到某个范围或者说到某种状态。在数据处理的时候我们常会碰到如下三种处理： 归一化（Nor" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" /><meta property="og:image" content="https://tony-laoshi.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-14T17:54:27+08:00" />
+<meta property="article:modified_time" content="2022-07-14T17:54:27+08:00" /><meta property="og:site_name" content="Qi&#39;s Blog" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tony-laoshi.github.io/logo.png"/>
+
+<meta name="twitter:title" content="Opencv数据标准化和归一化"/>
+<meta name="twitter:description" content="介绍 归一化和标准化都是对数据做变换，将原始的一组数据转换到某个范围或者说到某种状态。在数据处理的时候我们常会碰到如下三种处理： 归一化（Nor"/>
+<meta name="application-name" content="我的网站">
+<meta name="apple-mobile-web-app-title" content="我的网站"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" /><link rel="prev" href="https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Opencv数据标准化和归一化",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/tony-laoshi.github.io\/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96\/"
+        },"genre": "posts","keywords": "opencv","wordcount":  1696 ,
+        "url": "https:\/\/tony-laoshi.github.io\/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96\/","datePublished": "2022-07-14T17:54:27+08:00","dateModified": "2022-07-14T17:54:27+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Qi"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Qi&#39;s Blog">HOME</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Qi&#39;s Blog">HOME</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Opencv数据标准化和归一化</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Qi</a></span>&nbsp;<span class="post-category">included in <a href="/categories/opencv/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>opencv</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-07-14">2022-07-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1696 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;<span id="/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" class="leancloud_visitors" data-flag-title="Opencv数据标准化和归一化">
+                        <i class="far fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+            </div><div class="content" id="content"><h1 id="介绍">介绍</h1>
+<p>归一化和标准化都是对数据做变换，将原始的一组数据转换到某个范围或者说到某种状态。在数据处理的时候我们常会碰到如下三种处理：</p>
+<ul>
+<li>归一化（Normalization）：将一组数据变化到某个固定区间内，比较常见的如[0, 1]。广义来说可以是各种区间，比如在对图像进行处理是会经常映射到[0, 255]，也有映射到[-1, 1]的情况</li>
+<li>标准化（Standardization）：将一组数据变换为均值为0，标准差为1的分布（该分布并非一定符合正态分布）</li>
+<li>中心化：中心化也叫零均值处理，就是用一组原始数据减去这些数据的均值。比如在ICP算法中会先对数据进行中心化</li>
+</ul>
+<h1 id="联系和区别">联系和区别</h1>
+<p>本质上，归一化和标准化都是对数据做线性变换。
+但是也存在一些区别。比如第一，归一化会严格的限定变换后数据的区间。而标准化没有严格的区间限定，只是其数据的均值为0，标准差为1。第二，归一化对数据的缩放比例仅仅和极值有关，比如100个数，你除去极大值和极小值其他数据都更换掉，缩放比例<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://cdn.nlark.com/yuque/__latex/8502840d3c0ce63573d0058539d2ef7b.svg#card=math&amp;code=%5Calpha%20%3D%20X_%7Bmax%7D-X_%7Bmin%7D&amp;id=fzGvv"
+        data-srcset="https://cdn.nlark.com/yuque/__latex/8502840d3c0ce63573d0058539d2ef7b.svg#card=math&amp;code=%5Calpha%20%3D%20X_%7Bmax%7D-X_%7Bmin%7D&amp;id=fzGvv, https://cdn.nlark.com/yuque/__latex/8502840d3c0ce63573d0058539d2ef7b.svg#card=math&amp;code=%5Calpha%20%3D%20X_%7Bmax%7D-X_%7Bmin%7D&amp;id=fzGvv 1.5x, https://cdn.nlark.com/yuque/__latex/8502840d3c0ce63573d0058539d2ef7b.svg#card=math&amp;code=%5Calpha%20%3D%20X_%7Bmax%7D-X_%7Bmin%7D&amp;id=fzGvv 2x"
+        data-sizes="auto"
+        alt="https://cdn.nlark.com/yuque/__latex/8502840d3c0ce63573d0058539d2ef7b.svg#card=math&amp;code=%5Calpha%20%3D%20X_%7Bmax%7D-X_%7Bmin%7D&amp;id=fzGvv"
+        title="https://cdn.nlark.com/yuque/__latex/8502840d3c0ce63573d0058539d2ef7b.svg#card=math&amp;code=%5Calpha%20%3D%20X_%7Bmax%7D-X_%7Bmin%7D&amp;id=fzGvv" />是不变的；但是标准化中，如果除去极大值和极小值其他数据都更换掉，那么均值和标准差大概率会改变，这时候，缩放比例自然也改变了。</p>
+<h1 id="标准化和归一化的多种形式">标准化和归一化的多种形式</h1>
+<p>广义的说，标准化和归一化同为对数据的线性变化，所以我们没必要规定死，归一化就是必须到[ 0 , 1]之间，我到[ 0 , 1 ]之间之后再乘一个255也没有问题对吧。常见的有以下几种：</p>
+<ul>
+<li>归一化的最通用模式Normalization，也称线性归一化：</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://cdn.nlark.com/yuque/__latex/90005fcf88fb84f86bc440af3cf78126.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-X_%7B%5Cmin%20%7D%7D%7BX_%7B%5Cmax%20%7D-X_%7B%5Cmin%20%7D%7D%2C%20%5Ctext%20%7B%20%E8%8C%83%E5%9B%B4%20%7D%5B0%2C1%5D&amp;id=yYVNy"
+        data-srcset="https://cdn.nlark.com/yuque/__latex/90005fcf88fb84f86bc440af3cf78126.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-X_%7B%5Cmin%20%7D%7D%7BX_%7B%5Cmax%20%7D-X_%7B%5Cmin%20%7D%7D%2C%20%5Ctext%20%7B%20%E8%8C%83%E5%9B%B4%20%7D%5B0%2C1%5D&amp;id=yYVNy, https://cdn.nlark.com/yuque/__latex/90005fcf88fb84f86bc440af3cf78126.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-X_%7B%5Cmin%20%7D%7D%7BX_%7B%5Cmax%20%7D-X_%7B%5Cmin%20%7D%7D%2C%20%5Ctext%20%7B%20%E8%8C%83%E5%9B%B4%20%7D%5B0%2C1%5D&amp;id=yYVNy 1.5x, https://cdn.nlark.com/yuque/__latex/90005fcf88fb84f86bc440af3cf78126.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-X_%7B%5Cmin%20%7D%7D%7BX_%7B%5Cmax%20%7D-X_%7B%5Cmin%20%7D%7D%2C%20%5Ctext%20%7B%20%E8%8C%83%E5%9B%B4%20%7D%5B0%2C1%5D&amp;id=yYVNy 2x"
+        data-sizes="auto"
+        alt="https://cdn.nlark.com/yuque/__latex/90005fcf88fb84f86bc440af3cf78126.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-X_%7B%5Cmin%20%7D%7D%7BX_%7B%5Cmax%20%7D-X_%7B%5Cmin%20%7D%7D%2C%20%5Ctext%20%7B%20%E8%8C%83%E5%9B%B4%20%7D%5B0%2C1%5D&amp;id=yYVNy"
+        title="https://cdn.nlark.com/yuque/__latex/90005fcf88fb84f86bc440af3cf78126.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-X_%7B%5Cmin%20%7D%7D%7BX_%7B%5Cmax%20%7D-X_%7B%5Cmin%20%7D%7D%2C%20%5Ctext%20%7B%20%E8%8C%83%E5%9B%B4%20%7D%5B0%2C1%5D&amp;id=yYVNy" />
+<a href="https://blog.csdn.net/weixin_36604953/article/details/102652160" target="_blank" rel="noopener noreffer ">
+</a></p>
+<ul>
+<li>均值归一化 （Mean normalization）：</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://cdn.nlark.com/yuque/__latex/bdb6bb5dc00be3423dc275d5325c3ca4.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Coperatorname%7Bmean%7D%28X%29%7D%7BX_%7B%5Ctext%20%7Bmax%20%7D%7D-X_%7B%5Cmin%20%7D%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%20%7D%5B-1%2C1%5D&amp;id=DP3Mt"
+        data-srcset="https://cdn.nlark.com/yuque/__latex/bdb6bb5dc00be3423dc275d5325c3ca4.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Coperatorname%7Bmean%7D%28X%29%7D%7BX_%7B%5Ctext%20%7Bmax%20%7D%7D-X_%7B%5Cmin%20%7D%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%20%7D%5B-1%2C1%5D&amp;id=DP3Mt, https://cdn.nlark.com/yuque/__latex/bdb6bb5dc00be3423dc275d5325c3ca4.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Coperatorname%7Bmean%7D%28X%29%7D%7BX_%7B%5Ctext%20%7Bmax%20%7D%7D-X_%7B%5Cmin%20%7D%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%20%7D%5B-1%2C1%5D&amp;id=DP3Mt 1.5x, https://cdn.nlark.com/yuque/__latex/bdb6bb5dc00be3423dc275d5325c3ca4.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Coperatorname%7Bmean%7D%28X%29%7D%7BX_%7B%5Ctext%20%7Bmax%20%7D%7D-X_%7B%5Cmin%20%7D%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%20%7D%5B-1%2C1%5D&amp;id=DP3Mt 2x"
+        data-sizes="auto"
+        alt="https://cdn.nlark.com/yuque/__latex/bdb6bb5dc00be3423dc275d5325c3ca4.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Coperatorname%7Bmean%7D%28X%29%7D%7BX_%7B%5Ctext%20%7Bmax%20%7D%7D-X_%7B%5Cmin%20%7D%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%20%7D%5B-1%2C1%5D&amp;id=DP3Mt"
+        title="https://cdn.nlark.com/yuque/__latex/bdb6bb5dc00be3423dc275d5325c3ca4.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Coperatorname%7Bmean%7D%28X%29%7D%7BX_%7B%5Ctext%20%7Bmax%20%7D%7D-X_%7B%5Cmin%20%7D%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%20%7D%5B-1%2C1%5D&amp;id=DP3Mt" /></p>
+<ul>
+<li>标准化(Standardization)，也叫标准差标准化：</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://cdn.nlark.com/yuque/__latex/8ebea37c777a4dc7f0ebd687f971f223.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Cmu%7D%7B%5Csigma%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%E5%AE%9E%E6%95%B0%E9%9B%86%20%7D&amp;id=AADQo"
+        data-srcset="https://cdn.nlark.com/yuque/__latex/8ebea37c777a4dc7f0ebd687f971f223.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Cmu%7D%7B%5Csigma%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%E5%AE%9E%E6%95%B0%E9%9B%86%20%7D&amp;id=AADQo, https://cdn.nlark.com/yuque/__latex/8ebea37c777a4dc7f0ebd687f971f223.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Cmu%7D%7B%5Csigma%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%E5%AE%9E%E6%95%B0%E9%9B%86%20%7D&amp;id=AADQo 1.5x, https://cdn.nlark.com/yuque/__latex/8ebea37c777a4dc7f0ebd687f971f223.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Cmu%7D%7B%5Csigma%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%E5%AE%9E%E6%95%B0%E9%9B%86%20%7D&amp;id=AADQo 2x"
+        data-sizes="auto"
+        alt="https://cdn.nlark.com/yuque/__latex/8ebea37c777a4dc7f0ebd687f971f223.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Cmu%7D%7B%5Csigma%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%E5%AE%9E%E6%95%B0%E9%9B%86%20%7D&amp;id=AADQo"
+        title="https://cdn.nlark.com/yuque/__latex/8ebea37c777a4dc7f0ebd687f971f223.svg#card=math&amp;code=X_%7Bn%20e%20w%7D%3D%5Cfrac%7BX_%7Bi%7D-%5Cmu%7D%7B%5Csigma%7D%20%5Ctext%20%7B%2C%20%E8%8C%83%E5%9B%B4%E5%AE%9E%E6%95%B0%E9%9B%86%20%7D&amp;id=AADQo" /></p>
+<h1 id="标准化归一化的原因用途">标准化、归一化的原因、用途</h1>
+<p>为何统计模型、机器学习和深度学习任务中经常涉及到数据(特征)的标准化和归一化呢，一半原因以下几点，当然可能还有一些其他的作用，大家见解不同，我说的这些是通常情况下的原因和用途。</p>
+<ol>
+<li>统计建模中，如回归模型，自变量X 的量纲不一致导致了回归系数无法直接解读或者错误解读；需要将X都处理到统一量纲下，这样才可比；</li>
+<li>机器学习任务和统计学任务中有很多地方要用到“距离”的计算，比如PCA，比如KNN，比如kmeans等等，假使算欧式距离，不同维度量纲不同可能会导致距离的计算依赖于量纲较大的那些特征而得到不合理的结果；</li>
+<li>参数估计时使用梯度下降，在使用梯度下降的方法求解最优化问题时， 归一化/标准化后可以加快梯度下降的求解速度，即提升模型的收敛速度。</li>
+</ol>
+<h1 id="什么时候standardization什么时候normalization">什么时候Standardization，什么时候Normalization</h1>
+<ul>
+<li>如果对输出结果范围有要求，用归一化</li>
+<li>如果数据较为稳定，不存在极端的最大最小值，用归一化</li>
+<li>如果数据存在异常值和较多噪音，用标准化，可以间接通过中心化避免异常值和极端值的影响</li>
+</ul>
+<h1 id="cvnormalize-函数介绍">cv::normalize() 函数介绍</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">InputArray</span> <span class="n">src</span><span class="p">,</span> <span class="n">OutputArray</span> <span class="n">dst</span><span class="p">,</span> <span class="kt">double</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="kt">double</span> <span class="n">beta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">NORM_L2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dtype</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">InputArray</span> <span class="n">mask</span><span class="o">=</span><span class="n">noArray</span><span class="p">());</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>参数</p>
+<ul>
+<li><code>src</code>  - 输入数组</li>
+<li><code>dst</code> - 输出数组，支持原地运算</li>
+<li><code>alpha</code> -  range normalization模式的最小值</li>
+<li><code>beta </code>- range normalization模式的最大值，不用于norm normalization(范数归一化)模式。</li>
+<li><code>norm_type</code> - 归一化的类型，可以有以下的取值
+<ul>
+<li><code>NORM_MINMAX</code>:数组的数值被平移或缩放到一个指定的范围，线性归一化，一般较常用。比如归一化到[min, max]范围内，则计算公式如下：
+<ul>
+<li><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://cdn.nlark.com/yuque/__latex/fa52501609bf524a2981bd907ddbaa2f.svg#card=math&amp;code=d%20s%20t%28i%2C%20j%29%3D%5Cfrac%7B%5B%5Coperatorname%7Bsrc%7D%28i%2C%20j%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%5D%20%2A%28%5Cmax%20-%5Cmin%20%29%7D%7B%5Cmax%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%7D%2B%5Cmin&amp;id=OATmo"
+        data-srcset="https://cdn.nlark.com/yuque/__latex/fa52501609bf524a2981bd907ddbaa2f.svg#card=math&amp;code=d%20s%20t%28i%2C%20j%29%3D%5Cfrac%7B%5B%5Coperatorname%7Bsrc%7D%28i%2C%20j%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%5D%20%2A%28%5Cmax%20-%5Cmin%20%29%7D%7B%5Cmax%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%7D%2B%5Cmin&amp;id=OATmo, https://cdn.nlark.com/yuque/__latex/fa52501609bf524a2981bd907ddbaa2f.svg#card=math&amp;code=d%20s%20t%28i%2C%20j%29%3D%5Cfrac%7B%5B%5Coperatorname%7Bsrc%7D%28i%2C%20j%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%5D%20%2A%28%5Cmax%20-%5Cmin%20%29%7D%7B%5Cmax%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%7D%2B%5Cmin&amp;id=OATmo 1.5x, https://cdn.nlark.com/yuque/__latex/fa52501609bf524a2981bd907ddbaa2f.svg#card=math&amp;code=d%20s%20t%28i%2C%20j%29%3D%5Cfrac%7B%5B%5Coperatorname%7Bsrc%7D%28i%2C%20j%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%5D%20%2A%28%5Cmax%20-%5Cmin%20%29%7D%7B%5Cmax%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%7D%2B%5Cmin&amp;id=OATmo 2x"
+        data-sizes="auto"
+        alt="https://cdn.nlark.com/yuque/__latex/fa52501609bf524a2981bd907ddbaa2f.svg#card=math&amp;code=d%20s%20t%28i%2C%20j%29%3D%5Cfrac%7B%5B%5Coperatorname%7Bsrc%7D%28i%2C%20j%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%5D%20%2A%28%5Cmax%20-%5Cmin%20%29%7D%7B%5Cmax%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%7D%2B%5Cmin&amp;id=OATmo"
+        title="https://cdn.nlark.com/yuque/__latex/fa52501609bf524a2981bd907ddbaa2f.svg#card=math&amp;code=d%20s%20t%28i%2C%20j%29%3D%5Cfrac%7B%5B%5Coperatorname%7Bsrc%7D%28i%2C%20j%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%5D%20%2A%28%5Cmax%20-%5Cmin%20%29%7D%7B%5Cmax%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29-%5Cmin%20%28%5Coperatorname%7Bsrc%7D%28x%2C%20y%29%29%7D%2B%5Cmin&amp;id=OATmo" /></li>
+</ul>
+</li>
+<li> <code>NORM_INF</code>: 归一化数组的无穷范数(绝对值的最大值)。每个值除以最大值来进行无穷范数归一化。同上最终归一化的值为单位向量的每个值乘以参数要归一化的范数值alpha</li>
+<li><code> NORM_L1</code> :  归一化数组的L1-范数(绝对值的和)。数组元素绝对值求和，然后算出每一个元素比上总和的比值，加起来总为1。这里要归一化的范数值为1.0，所求出的比值即为最后归一化后的值，若归一化范数值alpha为2.0，则每个比值分别乘以2.0即得到最后归一化后的结果为0.2, 0.8, 1.0，以此类推</li>
+<li><code> NORM_L2</code>: 归一化数组的L2-范数(各元素的平方和然后求平方根 ，欧氏距离)。即将该向量归一化为单位向量，每个元素值除以该向量的模长。同上最终归一化的值为单位向量的每个值乘以参数要归一化的范数值alpha</li>
+</ul>
+</li>
+<li>dtype - 为负值时, 输出数据类型和输入数据类型一致，否则和src通道一致，depth =CV_MAT_DEPTH(dtype)</li>
+<li>mask -  掩码。选择感兴趣区域，选定后只能对该区域进行操作。</li>
+</ul>
+<h1 id="参考链接">参考链接</h1>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-07-14</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" data-title="Opencv数据标准化和归一化" data-hashtags="opencv"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" data-hashtag="opencv"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" data-title="Opencv数据标准化和归一化"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" data-title="Opencv数据标准化和归一化"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" data-title="Opencv数据标准化和归一化"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/opencv/">opencv</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" class="prev" rel="prev" title="Git快速入门以及VScode可视化Git"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Git快速入门以及VScode可视化Git</a></div>
+</div>
+
+
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.101.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Qi</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+
+            <span id="busuanzi_container_site_pv">
+                本站访问量：<span id="busuanzi_value_site_pv"></span>次
+            </span>
+
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"valine":{"appId":"xxx","appKey":"xxx","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@14.0.0/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

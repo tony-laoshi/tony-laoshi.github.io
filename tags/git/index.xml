@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Git - Tag - Qi&#39;s Blog</title>
+        <link>https://tony-laoshi.github.io/tags/git/</link>
+        <description>Git - Tag - Qi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 14 Jul 2022 17:51:06 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/tags/git/" rel="self" type="application/rss+xml" /><item>
+    <title>Git快速入门以及VScode可视化Git</title>
+    <link>https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/</link>
+    <pubDate>Thu, 14 Jul 2022 17:51:06 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/</guid>
+    <description><![CDATA[介绍 Git 是目前世界上被最广泛使用的现代软件版本管理系统。Git 本身亦是一个成熟并处于活跃开发状态的开源项目，它最初是由 Linux 操作系统内核的创造者 Linus]]></description>
+</item>
+</channel>
+</rss>

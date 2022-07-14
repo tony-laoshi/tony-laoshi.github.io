@@ -4,9 +4,14 @@
 # 前言
 pcl库的编译安装真心让人想吐，运气好一次通过，运气不好（各种环境的、各种依赖的问题）两三天就过去了。在这里分享下我安装pcl所遇到的问题。
 
+---
+<br />
+<br />
 
 # 通过sudo apt 安装
 通过这种方式安装的最大的好处就是简单且不容易出现编译安装的问题，缺点就是可能会有部分功能无法使用
+<br />
+
 ## 安装依赖
 ```bash
 sudo apt-get update
@@ -26,11 +31,15 @@ sudo apt-get install libopenni2-dev
 sudo apt-get install libvtk7-dev libvtk6-dev
 sudo apt-get install qt5-default
 ```
+<br />
+
 ## 安装PCL
 ```bash
 sudo apt-get install libpcl-dev
 ```
 至此，PCL库的安装和配置就算是完成了，接下来测试一下PCL库是否可以正常运行
+<br />
+
 
 ## 测试
 ### 编写源文件
@@ -83,6 +92,7 @@ int main(int argc, char **argv) {
 }
 
 ```
+<br />
 
 ### 编写CMakeLists.txt
 在目录下创建TestPCL文件夹，用于存储测试项目的文件，将test.cpp和CMakeLists.txt存储至TestPCL文件夹，创建TestPCL/bulid文件夹以储存中间文件。
@@ -102,6 +112,8 @@ target_link_libraries (TEST ${PCL_LIBRARIES})
 
 install(TARGETS TEST RUNTIME DESTINATION bin)
 ```
+<br />
+
 ### 编译安装运行
 ```bash
 cd build
@@ -109,9 +121,15 @@ cmake ..
 make
 ./TEST
 ```
+<br />
+
 ### 正常运行结果
 ![result](/posts/Ubuntu20.04安装PCL库/test_result.png)
 
+
+<br />
+<br />
+<br />
 
 # 通过源码安装
 ## 安装PCL依赖
@@ -131,6 +149,8 @@ sudo apt-get install mono-complete
 sudo apt-get install libopenni-dev
 sudo apt-get install libopenni2-dev
 ```
+<br />
+
 ## 安装VTK
 ### 安装vtk依赖
 ```bash
@@ -143,6 +163,8 @@ sudo apt-get install build-essential libgl1-mesa-dev libglu1-mesa-dev
 #cmake && cmake-gui
 sudo apt-get install cmake cmake-gui
 ```
+<br />
+
 
 ### 下载vtk
 
@@ -157,6 +179,7 @@ sudo apt-get install cmake cmake-gui
 
 [
 ](https://github.com/PointCloudLibrary/pcl/releases)
+<br />
 
 ### 编译安装
 下载完成之后解压到准备好的安装目录，再通过终端打开 cmake GUI 模式
@@ -177,6 +200,8 @@ cmake-gui
 make -j4    #性能好内存大的电脑就用 -j8 吧
 sudo make install
 ```
+<br />
+
 
 
 ## 安装PCL
@@ -190,9 +215,16 @@ cmake -DCMAKE_INSTALL_PREFIX=/usr/local/pcl-1.9.1 -DCMAKE_TYPE=None ..
 make -j4   #一样的，根据实际情况调整
 sudo make install
 ```
+<br />
+
 
 ## 测试
 同上
+<br />
+<br />
+<br />
+<br />
+
 
 
 
@@ -200,15 +232,18 @@ sudo make install
 ## 遇到的问题
 ### 问题1
 在make pcl的时候，报错：`“/usr/bin/ld: cannot find -lvtkIOMPIImage /usr/bin/ld: cannot find -lvtkIOMPIParallel /usr/bin/ld: cannot find -lvtkFiltersParallelDIY2”`
+<br />
+
 #### 解决方案
 重新编译安装 vtk。在cmake-gui模式下，完成第3步的`Configure`，然后勾选`Advanced`，在`search`中把`/usr/bin/ld`找不到的`vtkIOMPIImage`，`vtkIOMPIParallel`，`vtkFiltersParallelDIY2`都选上。包括如果出现了类似的问题也可以县看看这里面是否可以选上的。
 
 再点击`Configure`，显示“Configuring done”，点击`Generate`，显示“Generating done”。
 打开终端，完成 `make`  和  `sudo make install`
-
+<br />
 
 ### 问题2
 cmake pcl 的时候，提示`Checking for module ‘metslib’ – No package ‘metslib’ found`
+<br />
 
 #### 解决方案
 安装metslib（我用的是0.5.3版本）
@@ -222,9 +257,11 @@ sudo make install
 顺利完成安装metslib
 [
 ](https://blog.csdn.net/yunluoxiaobin/article/details/103078386)
+<br />
 
 ### 问题3
 `No rule to make target in /usr/lib/x86_64-linux-gnu/libpcl_surface. so **后面的内容不记得了**`
+<br />
 
 #### 解决方案
 ```bash
@@ -238,8 +275,12 @@ whereis libpcl_surface. so
 ```bash
 sudo ln -s /usr/lib/libpcl_*.so /usr/lib/x86_64-linux-gnu
 ```
-
+<br />
+<br />
 
 # 参考链接
 [二、PLC安装踩坑总结（Ubuntu 16.4+PCL1.8.1+VTK7.1+Qt5.9.9)_way7486chundan的博客-CSDN博客](https://blog.csdn.net/way7486chundan/article/details/110296785?utm_term=%E6%80%8E%E4%B9%88%E5%8D%B8%E8%BD%BDVTK&utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~all~sobaiduweb~default-2-110296785-null-null&spm=3001.4430)
+
+
+
 

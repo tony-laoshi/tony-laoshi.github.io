@@ -4,34 +4,34 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>Ubuntu20.04安装LaTeX并配置中文环境 - Qi&#39;s Blog</title><meta name="Description" content="这是 Qi 的blog"><meta property="og:title" content="Ubuntu20.04安装LaTeX并配置中文环境" />
-<meta property="og:description" content="简介 Latex是一个基于TEX的排班系统。粘贴复制的话就不搞了。简而言之，通俗来说，就是用来写文章的，而且完全不需要你去花时间去自己考虑排版" />
+        <title>Git快速入门以及VScode可视化Git - Qi&#39;s Blog</title><meta name="Description" content="这是 Qi 的blog"><meta property="og:title" content="Git快速入门以及VScode可视化Git" />
+<meta property="og:description" content="介绍 Git 是目前世界上被最广泛使用的现代软件版本管理系统。Git 本身亦是一个成熟并处于活跃开发状态的开源项目，它最初是由 Linux 操作系统内核的创造者 Linus" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" /><meta property="og:image" content="https://tony-laoshi.github.io/logo.png"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-06-30T20:40:06+08:00" />
-<meta property="article:modified_time" content="2022-06-30T20:40:06+08:00" /><meta property="og:site_name" content="Qi&#39;s Blog" />
+<meta property="og:url" content="https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" /><meta property="og:image" content="https://tony-laoshi.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-14T17:51:06+08:00" />
+<meta property="article:modified_time" content="2022-07-14T17:51:06+08:00" /><meta property="og:site_name" content="Qi&#39;s Blog" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://tony-laoshi.github.io/logo.png"/>
 
-<meta name="twitter:title" content="Ubuntu20.04安装LaTeX并配置中文环境"/>
-<meta name="twitter:description" content="简介 Latex是一个基于TEX的排班系统。粘贴复制的话就不搞了。简而言之，通俗来说，就是用来写文章的，而且完全不需要你去花时间去自己考虑排版"/>
+<meta name="twitter:title" content="Git快速入门以及VScode可视化Git"/>
+<meta name="twitter:description" content="介绍 Git 是目前世界上被最广泛使用的现代软件版本管理系统。Git 本身亦是一个成熟并处于活跃开发状态的开源项目，它最初是由 Linux 操作系统内核的创造者 Linus"/>
 <meta name="application-name" content="我的网站">
 <meta name="apple-mobile-web-app-title" content="我的网站"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" /><link rel="prev" href="https://tony-laoshi.github.io/ubuntu%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" /><link rel="next" href="https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" /><link rel="prev" href="https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" /><link rel="next" href="https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "Ubuntu20.04安装LaTeX并配置中文环境",
+        "headline": "Git快速入门以及VScode可视化Git",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/tony-laoshi.github.io\/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83\/"
-        },"genre": "posts","keywords": "Latex","wordcount":  532 ,
-        "url": "https:\/\/tony-laoshi.github.io\/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83\/","datePublished": "2022-06-30T20:40:06+08:00","dateModified": "2022-06-30T20:40:06+08:00","publisher": {
+            "@id": "https:\/\/tony-laoshi.github.io\/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git\/"
+        },"genre": "posts","keywords": "Git","wordcount":  238 ,
+        "url": "https:\/\/tony-laoshi.github.io\/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git\/","datePublished": "2022-07-14T17:51:06+08:00","dateModified": "2022-07-14T17:51:06+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -106,10 +106,10 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Ubuntu20.04安装LaTeX并配置中文环境</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Git快速入门以及VScode可视化Git</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Qi</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>软件安装</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-06-30">2022-06-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;532 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;<span id="/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" class="leancloud_visitors" data-flag-title="Ubuntu20.04安装LaTeX并配置中文环境">
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-07-14">2022-07-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;238 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;One minute&nbsp;<span id="/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" class="leancloud_visitors" data-flag-title="Git快速入门以及VScode可视化Git">
                         <i class="far fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
                     </span>&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="">
@@ -119,66 +119,46 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#mathpix">Mathpix</a></li>
-        <li><a href="#模板">模板</a></li>
-      </ul>
-    </li>
+    <li><a href="#安装git">安装Git</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="简介">简介</h1>
-<p>Latex是一个基于TEX的排班系统。粘贴复制的话就不搞了。简而言之，通俗来说，就是用来写文章的，而且完全不需要你去花时间去自己考虑排版、页码等没必要花时间去弄的玩意。而且，对于数学公式的输入也是极为方便，这点在后面会展示。</p>
-<hr>
-<br />
-<br />
-<h1 id="安装">安装</h1>
-<ol>
-<li><strong>安装发行版</strong> <code>sudo apt-get install texlive-full</code></li>
-<li><strong>安装XeLaTeX编译引擎</strong><code>sudo apt-get install texlive-xetex</code></li>
-<li><strong>安装中文支持包（如果需要）</strong><code>sudo apt-get install texlive-lang-chinese</code></li>
-<li><strong>安装编辑器</strong>（图形化界面的选择有很多，例如 TeXStudio，TeXmaker等，可以看做是一个编辑器，这里安装的是TexStudio）<code>sudo apt-get install texstudio</code></li>
-<li><strong>配置</strong>
-<ul>
-<li>设置编译器为XeLaTeX，TeXstudio中在Options-&gt;Configure TeXstudio-&gt;Build-&gt;Default Compiler中更改默认编译器为XeLaTeX</li>
-<li>更改软件界面语言，将Options-&gt;Configure TeXstudio-&gt;General-&gt;Language改为zh-CN即可将界面设置为中文</li>
-</ul>
-</li>
-</ol>
-<br />
-<br />
-<br />
-<h1 id="其他工具和资源">其他工具和资源</h1>
-<h3 id="mathpix">Mathpix</h3>
-<p>在写论文或者文档的时候，经常会碰到要输入数学公式的情况。如果去手敲，效率很低。这里介绍一个数学公式的latex语句生成工具 Mathpix。 碰到文献里的数学公式，只需要用这个软件，就可以轻松获得这个公式的latex语句。</p>
-<br />
-<h3 id="模板">模板</h3>
-<p>模板这里分享一个latex模板网站  <a href="https://www.latextemplates.com/" target="_blank" rel="noopener noreffer ">模板</a></p>
+            </div><div class="content" id="content"><h1 id="介绍">介绍</h1>
+<p>Git 是目前世界上被最广泛使用的现代软件版本管理系统。Git 本身亦是一个成熟并处于活跃开发状态的开源项目，它最初是由 Linux 操作系统内核的创造者 Linus Torvalds 在 2005 年创造。今天惊人数量的软件项目依赖 Git 进行版本管理，这些项目包括开源以及各种商业软件。Git 在职业软件开发者中拥有良好的声誉，Git 目前支持绝大多数的操作系统以及 IDE（Integrated Development Environments）。</p>
+<h1 id="快速指南">快速指南</h1>
+<p>该快速指南是面向从零开始的读者。</p>
+<h2 id="安装git">安装Git</h2>
+<p>Linux ： <code>sudo apt-get install git</code></p>
+<p>Git 的高质量中文教程
+<a href="https://github.com/geeeeeeeeek/git-recipes.git" target="_blank" rel="noopener noreffer ">https://github.com/geeeeeeeeek/git-recipes.git</a></p>
+<p>vs code上 Git可视化教程
+<a href="https://cloud.tencent.com/developer/article/1793472" target="_blank" rel="noopener noreffer ">https://cloud.tencent.com/developer/article/1793472</a></p>
+<p><a href="https://github.com/geeeeeeeeek/git-recipes.git" target="_blank" rel="noopener noreffer ">
+</a></p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2022-06-30</span>
+                <span>Updated on 2022-07-14</span>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/index.md" target="_blank">Read Markdown</a>
+                            <a class="link-to-markdown" href="/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/index.md" target="_blank">Read Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" data-title="Ubuntu20.04安装LaTeX并配置中文环境" data-hashtags="Latex"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" data-hashtag="Latex"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" data-title="Ubuntu20.04安装LaTeX并配置中文环境"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" data-title="Ubuntu20.04安装LaTeX并配置中文环境"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/" data-title="Ubuntu20.04安装LaTeX并配置中文环境"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" data-title="Git快速入门以及VScode可视化Git" data-hashtags="Git"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" data-hashtag="Git"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" data-title="Git快速入门以及VScode可视化Git"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" data-title="Git快速入门以及VScode可视化Git"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://tony-laoshi.github.io/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%BB%A5%E5%8F%8Avscode%E5%8F%AF%E8%A7%86%E5%8C%96git/" data-title="Git快速入门以及VScode可视化Git"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/latex/">Latex</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/git/">Git</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/ubuntu%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" class="prev" rel="prev" title="Ubuntu安装卸载基础知识"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Ubuntu安装卸载基础知识</a>
-            <a href="/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" class="next" rel="next" title="Ubuntu20.04安装PCL库">Ubuntu20.04安装PCL库<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/" class="prev" rel="prev" title="Ubuntu20.04安装PCL库"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Ubuntu20.04安装PCL库</a>
+            <a href="/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" class="next" rel="next" title="Opencv数据标准化和归一化">Opencv数据标准化和归一化<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 
 

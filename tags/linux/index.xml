@@ -3,23 +3,7 @@
         <title>Linux - Tag - Qi&#39;s Blog</title>
         <link>https://tony-laoshi.github.io/tags/linux/</link>
         <description>Linux - Tag - Qi&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 14 Jul 2022 15:25:06 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/tags/linux/" rel="self" type="application/rss+xml" /><item>
-    <title>Ubuntu20.04安装PCL库</title>
-    <link>https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/</link>
-    <pubDate>Thu, 14 Jul 2022 15:25:06 &#43;0800</pubDate>
-    <author>Qi</author>
-    <guid>https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/</guid>
-    <description><![CDATA[前言 pcl库的编译安装真心让人想吐，运气好一次通过，运气不好（各种环境的、各种依赖的问题）两三天就过去了。在这里分享下我安装pcl所遇到的问]]></description>
-</item>
-<item>
-    <title>Ubuntu20.04安装LaTeX并配置中文环境</title>
-    <link>https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/</link>
-    <pubDate>Thu, 30 Jun 2022 20:40:06 &#43;0800</pubDate>
-    <author>Qi</author>
-    <guid>https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/</guid>
-    <description><![CDATA[简介 Latex是一个基于TEX的排班系统。粘贴复制的话就不搞了。简而言之，通俗来说，就是用来写文章的，而且完全不需要你去花时间去自己考虑排版]]></description>
-</item>
-<item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 30 Jun 2022 16:54:31 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/tags/linux/" rel="self" type="application/rss+xml" /><item>
     <title>Ubuntu安装卸载基础知识</title>
     <link>https://tony-laoshi.github.io/ubuntu%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
     <pubDate>Thu, 30 Jun 2022 16:54:31 &#43;0800</pubDate>
