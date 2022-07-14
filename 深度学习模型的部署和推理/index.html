@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>深度学习模型的部署和推理 - Qi&#39;s Blog</title><meta name="Description" content="这是 Qi 的blog"><meta property="og:title" content="深度学习模型的部署和推理" />
+<meta property="og:description" content="简介 介绍深度学习训练好的模型在C&#43;&#43;中如何部署以及使用不同的推理引擎进行推理。这里是用Pytorch训练好的模型为例（用什么学习框架学习得到" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/" /><meta property="og:image" content="https://tony-laoshi.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-14T20:10:34+08:00" />
+<meta property="article:modified_time" content="2022-07-14T20:10:34+08:00" /><meta property="og:site_name" content="Qi&#39;s Blog" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tony-laoshi.github.io/logo.png"/>
+
+<meta name="twitter:title" content="深度学习模型的部署和推理"/>
+<meta name="twitter:description" content="简介 介绍深度学习训练好的模型在C&#43;&#43;中如何部署以及使用不同的推理引擎进行推理。这里是用Pytorch训练好的模型为例（用什么学习框架学习得到"/>
+<meta name="application-name" content="我的网站">
+<meta name="apple-mobile-web-app-title" content="我的网站"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/" /><link rel="prev" href="https://tony-laoshi.github.io/opencv-sgbm%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "深度学习模型的部署和推理",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/tony-laoshi.github.io\/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86\/"
+        },"genre": "posts","keywords": "CNN, ONNX Runtime","wordcount":  3010 ,
+        "url": "https:\/\/tony-laoshi.github.io\/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86\/","datePublished": "2022-07-14T20:10:34+08:00","dateModified": "2022-07-14T20:10:34+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Qi"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Qi&#39;s Blog">HOME</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Qi&#39;s Blog">HOME</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">深度学习模型的部署和推理</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Qi</a></span>&nbsp;<span class="post-category">included in <a href="/categories/cnn/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>CNN</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-07-14">2022-07-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;3010 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;<span id="/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/" class="leancloud_visitors" data-flag-title="深度学习模型的部署和推理">
+                        <i class="far fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#简介">简介</a></li>
+    <li><a href="#onnx-runtime">ONNX Runtime</a>
+      <ul>
+        <li><a href="#模型导出">模型导出</a></li>
+        <li><a href="#推理模型">推理模型</a>
+          <ul>
+            <li><a href="#onnx-runtime-安装c">ONNX Runtime 安装（C++）</a></li>
+            <li><a href="#使用-onnx-runtime-推理">使用 ONNX Runtime 推理</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#opencv-dnn">OpenCV DNN</a></li>
+    <li><a href="#libtorch">Libtorch</a>
+      <ul>
+        <li><a href="#模型导出-1">模型导出</a></li>
+        <li><a href="#推理部分">推理部分</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><br/>
+<br/>
+<h2 id="简介">简介</h2>
+<p>介绍深度学习训练好的模型在C++中如何部署以及使用不同的推理引擎进行推理。这里是用Pytorch训练好的模型为例（用什么学习框架学习得到的模型没关系，都有对应的模块导出模型的）。PyTorch 模型经常需要部署在 C++ 程序中，目前我知道的方法有三种（还有其他方式我没有尝试过）：</p>
+<ul>
+<li>LibTorch: PyTorch 官方 C++ 库</li>
+<li>ONNX Runtime</li>
+<li>OpenCV: DNN 模块
+<br/>
+<br/></li>
+</ul>
+<h2 id="onnx-runtime">ONNX Runtime</h2>
+<p>ONNX Runtime 是一个跨平台推理和训练机器学习加速器。也就是说，训练好的模型导出为 ONNX 格式后，可以用 ONNX Runtime 进行推理。
+<br/>
+<br/></p>
+<h3 id="模型导出">模型导出</h3>
+<p><strong>ONNX</strong>（Open Neural Network Exchange）是一种针对机器学习所设计的开放式的文件格式，用于存储训练好的模型。它使得不同的人工智能框架（如Pytorch、MXNet）可以采用相同格式存储模型数据并交互。 ONNX的规范及代码主要由微软，亚马逊，Facebook和IBM等公司共同开发，以开放源代码的方式托管在Github上。目前官方支持加载ONNX模型并进行推理的深度学习框架有： Caffe2, PyTorch, MXNet，ML.NET，TensorRT 和 Microsoft CNTK，并且 TensorFlow 也非官方的支持ONNX。
+使用<code>torch.onnx.export </code>可以直接保存模型为 onnx 格式，实例代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputL</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inputR</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">import</span> <span class="nn">onnx</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">inputL</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dummyL</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">368</span><span class="p">,</span> <span class="mi">1232</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dummyL</span> <span class="o">=</span> <span class="n">inputL</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">inputR</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dummyR</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">368</span><span class="p">,</span> <span class="mi">1232</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dummyR</span> <span class="o">=</span> <span class="n">inputR</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="n">onnx_path</span> <span class="o">=</span> <span class="s2">&#34;anynet2.onnx&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># onnx_path = &#34;anynet_with_spn.onnx&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">torch</span><span class="o">.</span><span class="n">onnx</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">model</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="p">(</span><span class="n">dummyL</span><span class="p">,</span> <span class="n">dummyR</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                <span class="n">onnx_path</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">opset_version</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">input_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&#34;imgL&#34;</span><span class="p">,</span> <span class="s2">&#34;imgR&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">                <span class="n">output_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&#34;disp1&#34;</span><span class="p">,</span> <span class="s2">&#34;disp2&#34;</span><span class="p">,</span> <span class="s2">&#34;disp3&#34;</span><span class="p">,]</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># output_names=[&#34;disp1&#34;, &#34;disp2&#34;, &#34;disp3&#34;, &#34;disp4&#34;]</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="n">onnx</span><span class="o">.</span><span class="n">checker</span><span class="o">.</span><span class="n">check_model</span><span class="p">(</span><span class="n">onnx</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;ONNX model exported to: &#34;</span> <span class="o">+</span> <span class="n">onnx_path</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br/>
+<br/>
+<h3 id="推理模型">推理模型</h3>
+<p>如果使用 ONNX Runtime 进行推理的话，事先还需要安装 ONNX Runtime（使用Python 的话比较简单，使用C++的话略微复杂）
+<br/>
+<br/></p>
+<h4 id="onnx-runtime-安装c">ONNX Runtime 安装（C++）</h4>
+<p>安装的方式一般分从源码编译安装（可以参考这个，流程基本一致，<a href="https://zhuanlan.zhihu.com/p/411887386" target="_blank" rel="noopener noreffer ">MacOS源码编译onnxruntime</a>）和使用预编译好的包 。
+<a href="https://onnxruntime.ai/" target="_blank" rel="noopener noreffer ">官网</a>上的的Linux预编译包下载指引让人摸不着头脑，这里建议直接从<a href="https://github.com/microsoft/onnxruntime/releases/" target="_blank" rel="noopener noreffer ">Github Release</a>页面下载。解压后你会发现预编译包里除了一些文档之外，只有头文件和二进制的库文件，没有任何包管理相关 (CMake、pkg-config 之类) 的配置文件。虽然<a href="https://github.com/microsoft/onnxruntime/blob/96bb4b1ce83efd13b7dba54f707b27303354e480/cmake/CMakeLists.txt#L1738-L1748" target="_blank" rel="noopener noreffer ">源码 CMakeLists</a> 中明明有 pkg-config 配置文件 .pc 的生成，但不知为何并没有被打包进预编译包。总之，拿到预编译包你没法直接通过 CMake/pkg-config 引入自己的工程。
+所以，在 CMake 项目中无法通过 find_package 找到 ONNX Runtime。可以仿照<a href="https://github.com/leimao/ONNX-Runtime-Inference" target="_blank" rel="noopener noreffer ">这个仓库</a>，使用 find_path 和 find_library 来查找：
+<br/></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_path</span><span class="p">(</span><span class="s">ONNX_RUNTIME_SESSION_INCLUDE_DIRS</span> <span class="s">onnxruntime_cxx_api.h</span>
+</span></span><span class="line"><span class="cl">  <span class="s">HINTS</span> <span class="s">/usr/local/include/onnxruntime/core/session/</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_path</span><span class="p">(</span><span class="s">ONNX_RUNTIME_PROVIDERS_INCLUDE_DIRS</span> <span class="s">cuda_provider_factory.h</span>
+</span></span><span class="line"><span class="cl">  <span class="s">HINTS</span> <span class="s">/usr/local/include/onnxruntime/core/providers/cuda/</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_library</span><span class="p">(</span><span class="s">ONNX_RUNTIME_LIB</span> <span class="s">onnxruntime</span> <span class="s">HINTS</span> <span class="s">/usr/local/lib</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">inference</span> <span class="s">inference.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">inference</span> <span class="s">PRIVATE</span>
+</span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">ONNX_RUNTIME_SESSION_INCLUDE_DIRS</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">ONNX_RUNTIME_PROVIDERS_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">inference</span> <span class="s">PRIVATE</span> <span class="o">${</span><span class="nv">ONNX_RUNTIME_LIB</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><br/>
+<p>分别指定了包含路径、库路径、链接库。
+或者也可以在预编译包的根目录下建立 share/cmake/onnxruntime 文件夹，在里面创建 onnxruntimeConfig.cmake 文件，内容为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c">#This will define the following variables:
+</span></span></span><span class="line"><span class="cl"><span class="c">#   onnxruntime_FOUND        -- True if the system has the onnxruntime library
+</span></span></span><span class="line"><span class="cl"><span class="c">#   onnxruntime_INCLUDE_DIRS -- The include directories for onnxruntime
+</span></span></span><span class="line"><span class="cl"><span class="c">#   onnxruntime_LIBRARIES    -- Libraries to link against
+</span></span></span><span class="line"><span class="cl"><span class="c">#   onnxruntime_CXX_FLAGS    -- Additional (required) compiler flags
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s">FindPackageHandleStandardArgs</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># Assume we are in &lt;install-prefix&gt;/share/cmake/onnxruntime/onnxruntimeConfig.cmake
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">CMAKE_CURRENT_LIST_DIR</span> <span class="s2">&#34;${CMAKE_CURRENT_LIST_FILE}&#34;</span> <span class="s">PATH</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">onnxruntime_INSTALL_PREFIX</span> <span class="s2">&#34;${CMAKE_CURRENT_LIST_DIR}/../../../&#34;</span> <span class="s">ABSOLUTE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">onnxruntime_INCLUDE_DIRS</span> <span class="o">${</span><span class="nv">onnxruntime_INSTALL_PREFIX</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">onnxruntime_LIBRARIES</span> <span class="s">onnxruntime</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">onnxruntime_CXX_FLAGS</span> <span class="s2">&#34;&#34;</span><span class="p">)</span> <span class="c"># no flags needed
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_library</span><span class="p">(</span><span class="s">onnxruntime_LIBRARY</span> <span class="s">onnxruntime</span>
+</span></span><span class="line"><span class="cl">    <span class="s">PATHS</span> <span class="s2">&#34;${onnxruntime_INSTALL_PREFIX}/lib&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="s">onnxruntime</span> <span class="s">SHARED</span> <span class="s">IMPORTED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_property</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">onnxruntime</span> <span class="s">PROPERTY</span> <span class="s">IMPORTED_LOCATION</span> <span class="s2">&#34;${onnxruntime_LIBRARY}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_property</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">onnxruntime</span> <span class="s">PROPERTY</span> <span class="s">INTERFACE_INCLUDE_DIRECTORIES</span> <span class="s2">&#34;${onnxruntime_INCLUDE_DIRS}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_property</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">onnxruntime</span> <span class="s">PROPERTY</span> <span class="s">INTERFACE_COMPILE_OPTIONS</span> <span class="s2">&#34;${onnxruntime_CXX_FLAGS}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package_handle_standard_args</span><span class="p">(</span><span class="s">onnxruntime</span> <span class="s">DEFAULT_MSG</span> <span class="s">onnxruntime_LIBRARY</span> <span class="s">onnxruntime_INCLUDE_DIRS</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><br/>
+<p>然后将预编译包的 include、lib、share 三个文件夹拷到系统路径，或者<a href="https://blog.csdn.net/mightbxg/article/details/114089740?spm=1001.2014.3001.5501" target="_blank" rel="noopener noreffer ">注册用户包</a>，就能在自己 CMake 项目中使用 find_package 找到 onnxruntime 了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 增加opencv的依赖
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">FIND_PACKAGE</span><span class="p">(</span> <span class="s">OpenCV</span> <span class="s">REQUIRED</span> <span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># onnxruntime
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">find_package</span><span class="p">(</span> <span class="s">onnxruntime</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">onnxruntime_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">ADD_EXECUTABLE</span><span class="p">(</span> <span class="s">main</span> <span class="s">main.cpp</span> <span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">TARGET_LINK_LIBRARIES</span><span class="p">(</span> <span class="s">main</span> 
+</span></span><span class="line"><span class="cl"><span class="o">${</span><span class="nv">OpenCV_LIBS</span><span class="o">}</span> 
+</span></span><span class="line"><span class="cl"><span class="o">${</span><span class="nv">onnxruntime_LIBRARIES</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="使用-onnx-runtime-推理">使用 ONNX Runtime 推理</h4>
+<p>这里附上一段在C++中使用 ONNX Runtime 进行推理的代码。其中一定要注意进行推理之前，要进行正确的图像预处理。同时，推理得到的Tensor 之后，如需转换成其他格式，也需要进行合适的后处理。在我这段例子当中，是将模型推理得到的Tensor 转换成视差图也就是cv::Mat 格式</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;  </span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sstream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;png.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;experimental_onnxruntime_cxx_api.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;onnxruntime_c_api.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;torch/torch.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;opencv2/dnn.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;opencv2/imgproc.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;opencv2/highgui.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">cv</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">torch</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// pretty prints a shape dimension vector
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">print_shape</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;&amp;</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">ss</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ss</span> <span class="o">&lt;&lt;</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;x&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ss</span> <span class="o">&lt;&lt;</span> <span class="n">v</span><span class="p">[</span><span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ss</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// image pre-process
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">Mat</span> <span class="nf">imagePreprocess</span><span class="p">(</span><span class="n">Mat</span> <span class="n">sourceImg</span><span class="p">,</span> <span class="n">Mat</span> <span class="n">preprocessedImage</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span> <span class="n">inputDims</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// step 1: Resize the image.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">resizedImageBGR</span><span class="p">,</span> <span class="n">resizedImageRGB</span><span class="p">,</span> <span class="n">resizedImage</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cv</span><span class="o">::</span><span class="n">resize</span><span class="p">(</span><span class="n">sourceImg</span><span class="p">,</span> <span class="n">resizedImageBGR</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">               <span class="n">cv</span><span class="o">::</span><span class="n">Size</span><span class="p">(</span><span class="n">inputDims</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">inputDims</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">               <span class="n">cv</span><span class="o">::</span><span class="n">InterpolationFlags</span><span class="o">::</span><span class="n">INTER_CUBIC</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// step 2: Convert the image to HWC RGB UINT8 format.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">cv</span><span class="o">::</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">resizedImageBGR</span><span class="p">,</span> <span class="n">resizedImageRGB</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                 <span class="n">cv</span><span class="o">::</span><span class="n">ColorConversionCodes</span><span class="o">::</span><span class="n">COLOR_BGR2RGB</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// step 3: Convert the image to HWC RGB float format by dividing each pixel by 255.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">resizedImageRGB</span><span class="p">.</span><span class="n">convertTo</span><span class="p">(</span><span class="n">resizedImage</span><span class="p">,</span> <span class="n">CV_32F</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mi">255</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// step 4: Split the RGB channels from the image.   
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">channels</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cv</span><span class="o">::</span><span class="n">split</span><span class="p">(</span><span class="n">resizedImage</span><span class="p">,</span> <span class="n">channels</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">//step 5: Normalize each channel.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// Normalization per channel
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">channels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">channels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.485</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.229</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">channels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">channels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.456</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.224</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">channels</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">channels</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.406</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.225</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">//step 6: Merge the RGB channels back to the image.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">cv</span><span class="o">::</span><span class="n">merge</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">resizedImage</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">//step 7: Convert the image to CHW RGB float format.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//HWC to CHW
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">cv</span><span class="o">::</span><span class="n">dnn</span><span class="o">::</span><span class="n">blobFromImage</span><span class="p">(</span><span class="n">resizedImage</span><span class="p">,</span> <span class="n">preprocessedImage</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">preprocessedImage</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// set path
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">string</span> <span class="n">modelFile</span> <span class="o">=</span> <span class="s">&#34;/home/standard/dengqi/codes/ONNX_testDemo/anynet2.onnx&#34;</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">leftImageFile</span> <span class="o">=</span> <span class="s">&#34;/home/standard/dengqi/codes/ONNX_testDemo/kittiTestImages/imgL/000000.png&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">rightImageFile</span> <span class="o">=</span> <span class="s">&#34;/home/standard/dengqi/codes/ONNX_testDemo/kittiTestImages/imgR/000000.png&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// onnxruntime setup
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Ort</span><span class="o">::</span><span class="n">Env</span> <span class="n">env</span><span class="p">(</span><span class="n">ORT_LOGGING_LEVEL_WARNING</span><span class="p">,</span> <span class="s">&#34;anynet&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Ort</span><span class="o">::</span><span class="n">SessionOptions</span> <span class="n">session_options</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">session_options</span><span class="p">.</span><span class="n">SetGraphOptimizationLevel</span><span class="p">(</span><span class="n">GraphOptimizationLevel</span><span class="o">::</span><span class="n">ORT_ENABLE_ALL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Ort</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">Session</span> <span class="n">session</span> <span class="o">=</span> <span class="n">Ort</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">Session</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">modelFile</span><span class="p">,</span> <span class="n">session_options</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Ort</span><span class="o">::</span><span class="n">AllocatorWithDefaultOptions</span> <span class="n">allocator</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// print name/shape of inputs
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">auto</span> <span class="n">input_names</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="n">GetInputNames</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">input_shapes</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="n">GetInputShapes</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">inputDims</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="n">GetInputTypeInfo</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">GetTensorTypeAndShapeInfo</span><span class="p">().</span><span class="n">GetShape</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Input Node Name/Shape (&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">input_names</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;):&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">input_names</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">input_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; : &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">print_shape</span><span class="p">(</span><span class="n">input_shapes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// print name/shape of outputs
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">auto</span> <span class="n">output_names</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="n">GetOutputNames</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">output_shapes</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="n">GetOutputShapes</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Output Node Name/Shape (&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">output_names</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;):&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">output_names</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">output_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; : &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">print_shape</span><span class="p">(</span><span class="n">output_shapes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">assert</span><span class="p">(</span><span class="n">input_names</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">output_names</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// ************** Load input images ***************************************************
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Mat</span> <span class="n">sourceImageL</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">leftImageFile</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">Mat</span> <span class="n">sourceImageR</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">rightImageFile</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cv</span><span class="o">::</span><span class="n">imshow</span><span class="p">(</span><span class="s">&#34;imageL&#34;</span><span class="p">,</span> <span class="n">sourceImageL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// Pre-processing input images
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Mat</span> <span class="n">imgL</span><span class="p">,</span> <span class="n">imgR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">imgL</span> <span class="o">=</span> <span class="n">imagePreprocess</span><span class="p">(</span><span class="n">sourceImageL</span><span class="p">,</span> <span class="n">imgL</span><span class="p">,</span> <span class="n">inputDims</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">imgR</span> <span class="o">=</span> <span class="n">imagePreprocess</span><span class="p">(</span><span class="n">sourceImageR</span><span class="p">,</span> <span class="n">imgR</span><span class="p">,</span> <span class="n">inputDims</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">//*************** Create Ort tensors for inputs ***************************************
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">auto</span> <span class="n">memory_info</span> <span class="o">=</span> <span class="n">Ort</span><span class="o">::</span><span class="n">MemoryInfo</span><span class="o">::</span><span class="n">CreateCpu</span><span class="p">(</span><span class="n">OrtAllocatorType</span><span class="o">::</span><span class="n">OrtArenaAllocator</span><span class="p">,</span> <span class="n">OrtMemType</span><span class="o">::</span><span class="n">OrtMemTypeDefault</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">Ort</span><span class="o">::</span><span class="n">Value</span> <span class="n">tensor1</span> <span class="o">=</span> <span class="n">Ort</span><span class="o">::</span><span class="n">Value</span><span class="o">::</span><span class="n">CreateTensor</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">memory_info</span><span class="p">,</span> <span class="n">imgL</span><span class="p">.</span><span class="n">ptr</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">imgL</span><span class="p">.</span><span class="n">total</span><span class="p">(),</span> <span class="n">input_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">data</span><span class="p">(),</span> <span class="n">input_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">assert</span><span class="p">(</span><span class="n">tensor1</span><span class="p">.</span><span class="n">IsTensor</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Ort</span><span class="o">::</span><span class="n">Value</span> <span class="n">tensor2</span> <span class="o">=</span> <span class="n">Ort</span><span class="o">::</span><span class="n">Value</span><span class="o">::</span><span class="n">CreateTensor</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">memory_info</span><span class="p">,</span> <span class="n">imgR</span><span class="p">.</span><span class="n">ptr</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">imgR</span><span class="p">.</span><span class="n">total</span><span class="p">(),</span> <span class="n">input_shapes</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">data</span><span class="p">(),</span> <span class="n">input_shapes</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">size</span><span class="p">());</span>   
+</span></span><span class="line"><span class="cl">    <span class="n">assert</span><span class="p">(</span><span class="n">tensor2</span><span class="p">.</span><span class="n">IsTensor</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Ort</span><span class="o">::</span><span class="n">Value</span><span class="o">&gt;</span> <span class="n">input_tensors</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">input_tensors</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">tensor1</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">input_tensors</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">tensor2</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">//*************** Forward ***************************************************************
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Running model...&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> 
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Ort</span><span class="o">::</span><span class="n">Value</span><span class="o">&gt;</span> <span class="n">output_tensors</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">start</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">system_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">output_tensors</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">input_names</span><span class="p">,</span> <span class="n">input_tensors</span><span class="p">,</span> <span class="n">output_names</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">end</span>   <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">system_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">duration</span> <span class="o">=</span> <span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">chrono</span><span class="o">::</span><span class="n">microseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span>  <span class="s">&#34; Successfully inferencing, taking  &#34;</span> 
+</span></span><span class="line"><span class="cl">            <span class="o">&lt;&lt;</span> <span class="kt">double</span><span class="p">(</span><span class="n">duration</span><span class="p">.</span><span class="n">count</span><span class="p">())</span> <span class="o">*</span> <span class="n">chrono</span><span class="o">::</span><span class="n">microseconds</span><span class="o">::</span><span class="n">period</span><span class="o">::</span><span class="n">num</span> <span class="o">/</span> <span class="n">chrono</span><span class="o">::</span><span class="n">microseconds</span><span class="o">::</span><span class="n">period</span><span class="o">::</span><span class="n">den</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; s&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;done&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c1">// Convert to cv::Mat and show
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// Get mutable data
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">float</span><span class="o">*</span> <span class="n">output_tensor_data</span> <span class="o">=</span> <span class="n">output_tensors</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">GetTensorMutableData</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">dispMap</span><span class="p">(</span><span class="mi">368</span><span class="p">,</span> <span class="mi">1232</span><span class="p">,</span> <span class="n">CV_32F</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">output_tensor_data</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="c1">//colorise and show
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">Mat</span> <span class="n">colorised_dispMap</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cv</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">dispMap</span><span class="p">,</span> <span class="n">dispMap</span><span class="p">,</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">NORM_MINMAX</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dispMap</span><span class="p">.</span><span class="n">convertTo</span><span class="p">(</span><span class="n">dispMap</span><span class="p">,</span> <span class="n">CV_8U</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cv</span><span class="o">::</span><span class="n">applyColorMap</span><span class="p">(</span><span class="n">dispMap</span><span class="p">,</span> <span class="n">colorised_dispMap</span><span class="p">,</span> <span class="n">cv</span><span class="o">::</span><span class="n">COLORMAP_JET</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">string</span> <span class="n">window_name</span> <span class="o">=</span> <span class="s">&#34;disparity_map_&#34;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cv</span><span class="o">::</span><span class="n">imshow</span><span class="p">(</span><span class="n">window_name</span><span class="p">,</span> <span class="n">colorised_dispMap</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cv</span><span class="o">::</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> 
+</span></span><span class="line"><span class="cl">    <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">Ort</span><span class="o">::</span><span class="n">Exception</span><span class="o">&amp;</span> <span class="n">exception</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;ERROR running model inference: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">exception</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>	
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br/>
+<p>若感兴趣完整的推理过程，可以直接在我的<a href="" rel="">仓库</a>，获取测试用的代码（C++, Python都有），以及已经保存好为onnx格式的网络模型。<a href="https://github.com/tony-laoshi/AnyNet" target="_blank" rel="noopener noreffer ">
+</a>
+<br/>
+<br/>
+<br/></p>
+<h2 id="opencv-dnn">OpenCV DNN</h2>
+<p>参见<a href="https://docs.opencv.org/4.5.2/dd/d55/pytorch_cls_c_tutorial_dnn_conversion.html" target="_blank" rel="noopener noreffer ">官方文档</a>，OpenCV DNN 模块能够直接加载 onnx 格式的模型，使用这个模块可以直接进行推理。但是缺点是有一些网络中自定义的操作，可能不被opencv dnn模块所支持。实例代码如下：
+<br/></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;opencv2/opencv.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">cv</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">dnn</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">bool</span> <span class="n">use_cuda</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">fn_image</span> <span class="o">=</span> <span class="s">&#34;cat.jpg&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">fn_model</span> <span class="o">=</span> <span class="s">&#34;super_resolution.onnx&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// load and config model
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Net</span> <span class="n">net</span> <span class="o">=</span> <span class="n">readNetFromONNX</span><span class="p">(</span><span class="n">fn_model</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">net</span><span class="p">.</span><span class="n">setPreferableBackend</span><span class="p">(</span><span class="n">DNN_BACKEND_OPENCV</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">net</span><span class="p">.</span><span class="n">setPreferableTarget</span><span class="p">(</span><span class="n">DNN_TARGET_CPU</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// source image
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">auto</span> <span class="n">image</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">fn_image</span><span class="p">,</span> <span class="n">cv</span><span class="o">::</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Mat</span> <span class="n">blob</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">blobFromImage</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">blob</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// inference and output
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">net</span><span class="p">.</span><span class="n">setInput</span><span class="p">(</span><span class="n">blob</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">output</span> <span class="o">=</span> <span class="n">net</span><span class="p">.</span><span class="n">forward</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">new_size</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">output</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">output</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">new_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">convertScaleAbs</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="mf">255.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br/>
+<br/>
+<h2 id="libtorch">Libtorch</h2>
+<h3 id="模型导出-1">模型导出</h3>
+<p>如果使用 LibTorch 进行推理的话，那么需要事先将模型导出为 Torch Script (.pt 格式) 文件，参见<a href="https://pytorch.org/tutorials/advanced/cpp_export.html" target="_blank" rel="noopener noreffer ">官方教程</a>。有两种方法：Tracing 和 Scripting。
+Tracing 就是提供一个示例输入，让 PyTorch 跑一遍整个网络，将过程中的全部操作记录下来，从而生成 Torch Script 模型：
+<br/>
+<br/></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">traced_script_model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">torch_model</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">traced_script_model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&#34;super_resolution.pt&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br/>
+<p>Scripting 则是直接分析网络结构转化模型：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">traced_script_model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">script</span><span class="p">(</span><span class="n">torch_model</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">traced_script_model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&#34;super_resolution.pt&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br/>
+这两种方法各有优缺点：如果模型正向传播的控制流跟输入相关，显然 Tracing 只能得到一种输入下的控制流，此时应该用 Scripting；而当模型使用了一些 Torch Script 不支持的特性，同时模型源码又无法修改时（如果能访问源码，Scripting 可以通过加入注释的方法忽略它们），Scripting 便无能为力了，此时只能考虑 Tracing。更多关于 Tracing 和 Scripting 的区别可以参考 [Mastering TorchScript](https://paulbridger.com/posts/mastering-torchscript/)。
+<br/>
+<h3 id="推理部分">推理部分</h3>
+<p>LibTorch 下载参见 <a href="https://pytorch.org/get-started/locally/" target="_blank" rel="noopener noreffer ">PyTorch: Get Started</a>。CMake 工程中使用 LibTorch 只需要加入 find_package(Torch REQUIRED)，并将自己的可执行文件/库链接到 ${TORCH_LIBRARIES} 即可。具体进行推理的 C++ 代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;opencv2/opencv.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;torch/script.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="n">torch</span><span class="o">::</span><span class="n">Tensor</span> <span class="n">toTensor</span><span class="p">(</span><span class="k">const</span> <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span><span class="o">&amp;</span> <span class="n">image</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// convert 8UC1 image to 4-D float tensor
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">CV_Assert</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">CV_8UC1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">torch</span><span class="o">::</span><span class="n">from_blob</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                            <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">image</span><span class="p">.</span><span class="n">rows</span><span class="p">,</span> <span class="n">image</span><span class="p">.</span><span class="n">cols</span> <span class="p">},</span> <span class="n">torch</span><span class="o">::</span><span class="n">kByte</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">toType</span><span class="p">(</span><span class="n">torch</span><span class="o">::</span><span class="n">kFloat32</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">mul</span><span class="p">(</span><span class="mf">1.f</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">toMat</span><span class="p">(</span><span class="k">const</span> <span class="n">torch</span><span class="o">::</span><span class="n">Tensor</span><span class="o">&amp;</span> <span class="n">tensor</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// convert tensor to 8UC1 image
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">using</span> <span class="k">namespace</span> <span class="n">torch</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Tensor</span> <span class="n">t</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">.</span><span class="n">mul</span><span class="p">(</span><span class="mf">255.f</span><span class="p">).</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">).</span><span class="n">toType</span><span class="p">(</span><span class="n">kU8</span><span class="p">).</span><span class="n">to</span><span class="p">(</span><span class="n">kCPU</span><span class="p">).</span><span class="n">squeeze</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CV_Assert</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">sizes</span><span class="p">().</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">t</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">CV_8UC1</span><span class="p">,</span> <span class="n">t</span><span class="p">.</span><span class="n">data_ptr</span><span class="p">()).</span><span class="n">clone</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">bool</span> <span class="n">use_cuda</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">fn_image</span> <span class="o">=</span> <span class="s">&#34;cat.jpg&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">fn_model</span> <span class="o">=</span> <span class="s">&#34;super_resolution.pt&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// load model
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">auto</span> <span class="n">module</span> <span class="o">=</span> <span class="n">torch</span><span class="o">::</span><span class="n">jit</span><span class="o">::</span><span class="n">load</span><span class="p">(</span><span class="n">fn_model</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">use_cuda</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">module</span><span class="p">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">::</span><span class="n">kCUDA</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// load source image
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">auto</span> <span class="n">image</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">fn_image</span><span class="p">,</span> <span class="n">cv</span><span class="o">::</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">input</span> <span class="o">=</span> <span class="n">toTensor</span><span class="p">(</span><span class="n">image</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">use_cuda</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">input</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">::</span><span class="n">kCUDA</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// inference
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">auto</span> <span class="n">output</span> <span class="o">=</span> <span class="n">module</span><span class="p">.</span><span class="n">forward</span><span class="p">({</span> <span class="n">input</span> <span class="p">}).</span><span class="n">toTensor</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">result_torch</span> <span class="o">=</span> <span class="n">toMat</span><span class="p">(</span><span class="n">output</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">imwrite</span><span class="p">(</span><span class="s">&#34;result_torch.png&#34;</span><span class="p">,</span> <span class="n">result_torch</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br/>
+<h1 id="参考链接">参考链接</h1>
+<p><a href="https://www.codeleading.com/article/30425879409/" target="_blank" rel="noopener noreffer ">pytorch模型部署</a>
+<a href="https://www.guyuehome.com/35775" target="_blank" rel="noopener noreffer ">深度学习之从 python 到 C++</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-07-14</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/" data-title="深度学习模型的部署和推理" data-hashtags="CNN, ONNX Runtime"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/" data-hashtag="CNN, ONNX Runtime"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/" data-title="深度学习模型的部署和推理"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/" data-title="深度学习模型的部署和推理"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/" data-title="深度学习模型的部署和推理"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/cnn-onnx-runtime/">CNN, ONNX Runtime</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/opencv-sgbm%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/" class="prev" rel="prev" title="Opencv SGBM立体匹配算法"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Opencv SGBM立体匹配算法</a></div>
+</div>
+
+
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.101.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Qi</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+
+            <span id="busuanzi_container_site_pv">
+                本站访问量：<span id="busuanzi_value_site_pv"></span>次
+            </span>
+
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"valine":{"appId":"xxx","appKey":"xxx","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@14.0.0/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

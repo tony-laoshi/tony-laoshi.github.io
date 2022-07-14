@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Opencv图像数据类型 - Qi&#39;s Blog</title><meta name="Description" content="这是 Qi 的blog"><meta property="og:title" content="Opencv图像数据类型" />
+<meta property="og:description" content="数据类型的形式 数据类型的形式一般为CV_&lt;bit_depth&gt;(S|U|F)C&lt;number_of_channels&gt" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" /><meta property="og:image" content="https://tony-laoshi.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-14T19:31:48+08:00" />
+<meta property="article:modified_time" content="2022-07-14T19:31:48+08:00" /><meta property="og:site_name" content="Qi&#39;s Blog" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tony-laoshi.github.io/logo.png"/>
+
+<meta name="twitter:title" content="Opencv图像数据类型"/>
+<meta name="twitter:description" content="数据类型的形式 数据类型的形式一般为CV_&lt;bit_depth&gt;(S|U|F)C&lt;number_of_channels&gt"/>
+<meta name="application-name" content="我的网站">
+<meta name="apple-mobile-web-app-title" content="我的网站"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" /><link rel="prev" href="https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" /><link rel="next" href="https://tony-laoshi.github.io/opencv-sgbm%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Opencv图像数据类型",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/tony-laoshi.github.io\/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B\/"
+        },"genre": "posts","keywords": "cv::Mat","wordcount":  2551 ,
+        "url": "https:\/\/tony-laoshi.github.io\/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B\/","datePublished": "2022-07-14T19:31:48+08:00","dateModified": "2022-07-14T19:31:48+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Qi"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Qi&#39;s Blog">HOME</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Qi&#39;s Blog">HOME</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Opencv图像数据类型</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Qi</a></span>&nbsp;<span class="post-category">included in <a href="/categories/opencv/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>opencv</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-07-14">2022-07-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2551 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;6 minutes&nbsp;<span id="/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="leancloud_visitors" data-flag-title="Opencv图像数据类型">
+                        <i class="far fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+            </div><div class="content" id="content"><p><a name="XIptC"></a></p>
+<h1 id="数据类型的形式">数据类型的形式</h1>
+<p>数据类型的形式一般为<code>CV_&lt;bit_depth&gt;(S|U|F)C&lt;number_of_channels&gt;</code>，其各自的含义如下：</p>
+<ul>
+<li><code>bit_depth</code>：比特数，代表图像像素的位数，即像素深度，比如8bite、16bites、32bites、64bites</li>
+<li><code>S|U|F</code>: <strong>S</strong>代表<code>signed int</code> 有符号整形。<strong>U</strong>代表 <code>unsigned int </code>无符号整形。<strong>F</strong>代表 <code>float</code> 单精度浮点型</li>
+<li><code>C&lt;number_of_channels&gt;</code>: 代表一张图片的通道数比如:
+<ul>
+<li>channels = 1：灰度图片。是单通道图像</li>
+<li>channels = 3：RGB彩色图像。是3通道图像</li>
+<li>channels = 4：带<strong>alpha</strong>通道的RGB图像，表示透明度。是4通道图像</li>
+</ul>
+</li>
+</ul>
+<p>例如：CV_8U 代表的是像素位数为8，无符号数据，单通道格式</p>
+<br />
+<br />
+<p><a name="YqmMn"></a></p>
+<h1 id="常见opencv的数据类型">常见Opencv的数据类型</h1>
+<table>
+<thead>
+<tr>
+<th>cv类型</th>
+<th>枚举数值</th>
+<th>空间大小</th>
+<th>范围</th>
+<th>常规类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CV_8U</td>
+<td>0</td>
+<td>8bits</td>
+<td>0~255</td>
+<td>unsigned char或uint8_t</td>
+</tr>
+<tr>
+<td>CV_8S</td>
+<td>1</td>
+<td>8bits</td>
+<td>-128~127</td>
+<td>char或int8_t</td>
+</tr>
+<tr>
+<td>CV_16U</td>
+<td>2</td>
+<td>16bits</td>
+<td>0~65535</td>
+<td>ushort, unsigned short int, unsigned short或uint16_t</td>
+</tr>
+<tr>
+<td>CV_16S</td>
+<td>3</td>
+<td>16bits</td>
+<td>-32768~32767</td>
+<td>short, short int或int16_t</td>
+</tr>
+<tr>
+<td>CV_32S</td>
+<td>4</td>
+<td>32bits</td>
+<td>-2147483648~2147483647</td>
+<td>int,long或int32_t/int64_t</td>
+</tr>
+<tr>
+<td>CV_32F</td>
+<td>5</td>
+<td>32bits</td>
+<td>1.18e-38~3.40e38</td>
+<td>float</td>
+</tr>
+<tr>
+<td>CV_64F</td>
+<td>6</td>
+<td>64bits</td>
+<td>2.23e-308~1.79e308</td>
+<td>double</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>C1</strong></th>
+<th><strong>C2</strong></th>
+<th><strong>C3</strong></th>
+<th><strong>C4</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CV_8U</td>
+<td>0</td>
+<td>8</td>
+<td>16</td>
+<td>24</td>
+</tr>
+<tr>
+<td>CV_8S</td>
+<td>1</td>
+<td>9</td>
+<td>17</td>
+<td>25</td>
+</tr>
+<tr>
+<td>CV_16U</td>
+<td>2</td>
+<td>10</td>
+<td>18</td>
+<td>26</td>
+</tr>
+<tr>
+<td>CV_16S</td>
+<td>3</td>
+<td>11</td>
+<td>19</td>
+<td>27</td>
+</tr>
+<tr>
+<td>CV_32S</td>
+<td>4</td>
+<td>12</td>
+<td>20</td>
+<td>28</td>
+</tr>
+<tr>
+<td>CV_32F</td>
+<td>5</td>
+<td>13</td>
+<td>21</td>
+<td>29</td>
+</tr>
+<tr>
+<td>CV_64F</td>
+<td>6</td>
+<td>14</td>
+<td>22</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+<br />
+<br />
+<p><a name="OKJCq"></a></p>
+<h1 id="heading"></h1>
+<p><a name="pXtHH"></a></p>
+<h1 id="mat-的创建">Mat 的创建</h1>
+<ul>
+<li>常使用的是利用构造函数 <code>Mat(nrows, ncols, type, [fillValue])</code>，最后一个参数中括号里代表可选参数，表示填入的初始值，如果不写默认为0。<code>nrows</code>、<code>ncols</code>一般为int型的整数，但ncols也可以为数组，这样表示建立一个多维Mat,此时传入的nrows表示维度。前两个参数还可以用<code>Size(ncol,nrow)</code>代替(注意Size里行列的顺序和函数参数的顺序是反的)，这就是另一种构造函数了。</li>
+<li>也可以先声明一个Mat，然后利用其成员函数创建Mat。<code>create()</code>成员函数格式如下：<code>Mat(nrows,ncols,type)</code>，它只能接收3个参数，与构造函数的区别就是无法赋初值。使用示例如下：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">m1</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CV_8UC1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">m2</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">CV_8UC1</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">m4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">m4</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CV_8UC1</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br />
+<br />
+<p><a name="MNvef"></a></p>
+<h1 id="mat-常用属性和函数">Mat 常用属性和函数</h1>
+<ul>
+<li>
+<p><code>rows</code>：返回Mat的行数，仅对二维Mat有效，高维返回-1</p>
+</li>
+<li>
+<p><code>cols</code>：返回Mat的列数，仅对二维Mat有效，高维返回-1</p>
+</li>
+<li>
+<p><code>size</code>：返回Mat的尺寸大小(长x宽x高…)</p>
+</li>
+<li>
+<p><code>dims</code>：返回Mat中数据的维度，OpenCV中维度永远大于等于2。如 3 * 4 的矩阵为 2 维， 3 * 4 * 5 的为3维</p>
+</li>
+<li>
+<p><code>depth()</code>：用来度量每一个像素中每一个通道的精度，但它本身与图像的通道数无关！depth数值越大，精度越高。在Opencv中，Mat.depth()得到的是一个0~6的数字，分别代表不同的位数，对应关系如下：                enum{CV_8U=0,CV_8S=1,CV_16U=2,CV_16S=3,CV_32S=4,CV_32F=5,CV_64F=6}</p>
+</li>
+<li>
+<p><code>channels()</code>：通道数量，矩阵中表示一个元素所需要的值的个数。Mat矩阵元素拥有的通道数。例如常见的RGB彩色图像，channels==3；而灰度图像只有一个灰度分量信息，channels==1。</p>
+</li>
+<li>
+<p><code>at()</code>：返回Mat某行某列的元素(可修改)</p>
+</li>
+<li>
+<p><code>tr()</code>：返回指向Mat的行指针</p>
+</li>
+<li>
+<p><code>clone()</code>：返回Mat的深拷贝</p>
+</li>
+<li>
+<p><code>copyTo()</code>：返回Mat的深拷贝</p>
+</li>
+<li>
+<p><code>eye()</code>：生成单位阵</p>
+</li>
+<li>
+<p>zeros()：生成元素全为0的矩阵</p>
+</li>
+<li>
+<p><code>ones()</code>：生成元素全为1的矩阵</p>
+</li>
+<li>
+<p><code>type()</code>：返回Mat的元素类型索引</p>
+</li>
+<li>
+<p><code>inv()</code>：Mat求逆</p>
+</li>
+<li>
+<p><code>mul()</code>：Mat矩阵乘法</p>
+</li>
+<li>
+<p><code>data()</code>：返回指向矩阵数据单元的指针</p>
+</li>
+<li>
+<p><code>total()</code>：返回矩阵中的元素总数</p>
+</li>
+<li>
+<p><code>cv::hconcat()</code>：水平拼接两个矩阵</p>
+</li>
+<li>
+<p><code>cv::vconcat()</code>：数值拼接两个矩阵
+<br />
+<br /></p>
+</li>
+</ul>
+<p><a name="vZADM"></a></p>
+<h1 id="mat的元素操作">Mat的元素操作</h1>
+<ul>
+<li>获取Mat中的元素可以使用成员函数 <code>at()</code>。<code>.at&lt;&gt;()</code> 用法是尖括号<code>&lt;&gt;</code>传入模板参数，表示数据类型，小括号<code>()</code>中再传入行、列的索引，返回元素的引用。也可以只传入行或列，这样就是整行或者整列。<code>at()</code><strong>函数传入的模板参数数据类型必须与</strong><code>Mat</code><strong>的数据类型严格一致。</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">m1</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span><span class="o">::</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CV_32F</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">m1</span><span class="p">.</span><span class="n">at</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>也可以使用<code>ptr()</code>成员函数。它返回的是一个指针。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Mat</span> <span class="n">M</span> <span class="o">=</span> <span class="n">Mat</span><span class="o">::</span><span class="n">eye</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">CV_64F</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">.</span><span class="n">rows</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">const</span> <span class="kt">double</span> <span class="o">*</span><span class="n">Mi</span> <span class="o">=</span> <span class="n">M</span><span class="p">.</span><span class="n">ptr</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">.</span><span class="n">cols</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sum</span> <span class="o">+=</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">Mi</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="mf">0.</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br />
+<br />
+<br />
+<br />
+<p><a name="WNnXL"></a></p>
+<h1 id="heading-1"></h1>
+<p><a name="pXAzI"></a></p>
+<h1 id="图像的显示">图像的显示</h1>
+<p><code>imshow</code>函数在显示图像时，会将各种类型的数据都映射到[0, 255]。<br />比如：如果载入的图像是8U类型，就显示图像本来的样子。如果图像是16U 或32S（32S去掉符号位只有16位），便用像素值除以256。也就是说，值的范围是 [0, 255*256]映射到[0,255]。如果图像是32位或64位浮点型（32For 64F），像素值便要乘以255。也就是说，该值的范围是 [0,1]映射到[0,255]。 <br />如：CV_8U的灰度或BGR图像的颜色分量都在0~255之间。直接imshow可以显示图像。CV_32F或者CV_64F取值范围为0~1.0，imshow的时候会把图像乘以255后再显示。
+<br />
+<br />
+<br />
+<br /></p>
+<p><a name="m2iRw"></a></p>
+<h1 id="图像的尺寸操作">图像的尺寸操作</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;opencv2/opencv.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;opencv2/imgproc/imgproc.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">cv</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">Mat</span> <span class="n">srcImage</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="s">&#34;1.jpg&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">Mat</span> <span class="n">temImage</span><span class="p">,</span> <span class="n">dstImage1</span><span class="p">,</span> <span class="n">dstImage2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">temImage</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">	<span class="c1">//尺寸调整
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//第一个参数：输入图像
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//第二个参数：输出图像
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//第三个参数输出图像的尺寸，如果是0，则有dsize=Size(round(fx*src.cols),round(fy*src,rows))计算得出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//第四个参数：水平轴的缩放系数，默认为0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//第五个参数：y轴撒谎能够的缩放系数，默认为0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//第六个参数：插值方式，默认为INTER_LINEAR线性插值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="n">resize</span><span class="p">(</span><span class="n">temImage</span><span class="p">,</span> <span class="n">dstImage1</span><span class="p">,</span> <span class="n">Size</span><span class="p">(</span><span class="n">temImage</span><span class="p">.</span><span class="n">cols</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">temImage</span><span class="p">.</span><span class="n">rows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">INTER_LINEAR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">resize</span><span class="p">(</span><span class="n">temImage</span><span class="p">,</span> <span class="n">dstImage2</span><span class="p">,</span> <span class="n">Size</span><span class="p">(</span><span class="n">temImage</span><span class="p">.</span><span class="n">cols</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">temImage</span><span class="p">.</span><span class="n">rows</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">INTER_LINEAR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">	<span class="n">imshow</span><span class="p">(</span><span class="s">&#34;缩小&#34;</span><span class="p">,</span> <span class="n">dstImage1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">imshow</span><span class="p">(</span><span class="s">&#34;放大&#34;</span><span class="p">,</span> <span class="n">dstImage2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">waitKey</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br />
+<br />
+<br />
+<br />
+<p><a name="hkPHf"></a></p>
+<h1 id="图像标准化操作减去均值除以方差">图像标准化操作(减去均值，除以方差)</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">Normalizer</span><span class="p">(</span><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">src</span><span class="p">,</span> <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">dst</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">mean</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">std</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span><span class="o">&gt;</span> <span class="n">bgrChannels</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cv</span><span class="o">::</span><span class="n">split</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">bgrChannels</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bgrChannels</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bgrChannels</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">convertTo</span><span class="p">(</span><span class="n">bgrChannels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">CV_32FC1</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">std_value</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">-</span> <span class="n">mean_value</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">std_value</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cv</span><span class="o">::</span><span class="n">meger</span><span class="p">(</span><span class="n">bgrChannels</span><span class="p">,</span> <span class="n">dst</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><br />
+<br />
+<br />
+<br />
+<p><a name="uZpbg"></a></p>
+<h1 id="数据类型之间的转换">数据类型之间的转换</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">convertTo</span><span class="p">(</span> <span class="n">OutputArray</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rtype</span><span class="p">,</span> <span class="kt">double</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="kt">double</span> <span class="n">beta</span><span class="o">=</span><span class="mi">0</span> <span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>描述：把一个矩阵从一种数据类型转换到另一种数据类型，同时可以带上缩放因子和增量。</li>
+<li>参数解释
+<ul>
+<li><code>m</code>  目标矩阵。如果<code>m</code>在运算前没有合适的尺寸或类型，将被重新分配。</li>
+<li><code>rtype</code> 目标矩阵的类型。因为目标矩阵的通道数与源矩阵一样，所以<code>rtype</code>也可以看做是目标矩阵的位深度。如果<code>rtype</code>为负值，目标矩阵和源矩阵将使用同样的类型。</li>
+<li><code>alpha</code>  尺度变换因子（可选）。默认值是1。即把原矩阵中的每一个元素都乘以<code>alpha</code>。</li>
+<li><code>beta</code>    附加到尺度变换后的值上的偏移量（可选）。默认值是0。即把原矩阵中的每一个元素都乘以<code>alpha</code>，再加上<code>beta</code>。</li>
+</ul>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-07-14</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" data-title="Opencv图像数据类型" data-hashtags="cv::Mat"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" data-hashtag="cv::Mat"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" data-title="Opencv图像数据类型"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" data-title="Opencv图像数据类型"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" data-title="Opencv图像数据类型"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/cvmat/">cv::Mat</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/" class="prev" rel="prev" title="Opencv数据标准化和归一化"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Opencv数据标准化和归一化</a>
+            <a href="/opencv-sgbm%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/" class="next" rel="next" title="Opencv SGBM立体匹配算法">Opencv SGBM立体匹配算法<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+
+
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.101.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Qi</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+
+            <span id="busuanzi_container_site_pv">
+                本站访问量：<span id="busuanzi_value_site_pv"></span>次
+            </span>
+
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"valine":{"appId":"xxx","appKey":"xxx","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@14.0.0/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

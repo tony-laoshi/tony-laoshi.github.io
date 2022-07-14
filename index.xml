@@ -3,9 +3,33 @@
         <title>Qi&#39;s Blog</title>
         <link>https://tony-laoshi.github.io/</link>
         <description>这是 Qi 的blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 14 Jul 2022 17:54:27 &#43;0800</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 14 Jul 2022 20:10:34 &#43;0800</lastBuildDate>
             <atom:link href="https://tony-laoshi.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>深度学习模型的部署和推理</title>
+    <link>https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/</link>
+    <pubDate>Thu, 14 Jul 2022 20:10:34 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/</guid>
+    <description><![CDATA[简介 介绍深度学习训练好的模型在C++中如何部署以及使用不同的推理引擎进行推理。这里是用Pytorch训练好的模型为例（用什么学习框架学习得到]]></description>
+</item>
+<item>
+    <title>Opencv SGBM立体匹配算法</title>
+    <link>https://tony-laoshi.github.io/opencv-sgbm%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/</link>
+    <pubDate>Thu, 14 Jul 2022 19:32:08 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/opencv-sgbm%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/</guid>
+    <description><![CDATA[前言 传统的立体匹配算法当中，BM（Block Matching），SGBM（Semi-Global Block matching），是两种常用的算法。并且]]></description>
+</item>
+<item>
+    <title>Opencv图像数据类型</title>
+    <link>https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</link>
+    <pubDate>Thu, 14 Jul 2022 19:31:48 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</guid>
+    <description><![CDATA[数据类型的形式 数据类型的形式一般为CV_&lt;bit_depth&gt;(S|U|F)C&lt;number_of_channels&gt]]></description>
+</item>
+<item>
     <title>Opencv数据标准化和归一化</title>
     <link>https://tony-laoshi.github.io/opencv%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E5%92%8C%E5%BD%92%E4%B8%80%E5%8C%96/</link>
     <pubDate>Thu, 14 Jul 2022 17:54:27 &#43;0800</pubDate>

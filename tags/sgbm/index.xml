@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>SGBM - Tag - Qi&#39;s Blog</title>
+        <link>https://tony-laoshi.github.io/tags/sgbm/</link>
+        <description>SGBM - Tag - Qi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 14 Jul 2022 19:32:08 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/tags/sgbm/" rel="self" type="application/rss+xml" /><item>
+    <title>Opencv SGBM立体匹配算法</title>
+    <link>https://tony-laoshi.github.io/opencv-sgbm%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/</link>
+    <pubDate>Thu, 14 Jul 2022 19:32:08 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/opencv-sgbm%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/</guid>
+    <description><![CDATA[前言 传统的立体匹配算法当中，BM（Block Matching），SGBM（Semi-Global Block matching），是两种常用的算法。并且]]></description>
+</item>
+</channel>
+</rss>

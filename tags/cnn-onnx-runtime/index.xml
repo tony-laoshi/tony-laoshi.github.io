@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>CNN, ONNX Runtime - Tag - Qi&#39;s Blog</title>
+        <link>https://tony-laoshi.github.io/tags/cnn-onnx-runtime/</link>
+        <description>CNN, ONNX Runtime - Tag - Qi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 14 Jul 2022 20:10:34 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/tags/cnn-onnx-runtime/" rel="self" type="application/rss+xml" /><item>
+    <title>深度学习模型的部署和推理</title>
+    <link>https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/</link>
+    <pubDate>Thu, 14 Jul 2022 20:10:34 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/</guid>
+    <description><![CDATA[简介 介绍深度学习训练好的模型在C++中如何部署以及使用不同的推理引擎进行推理。这里是用Pytorch训练好的模型为例（用什么学习框架学习得到]]></description>
+</item>
+</channel>
+</rss>

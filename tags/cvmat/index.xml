@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>cv::Mat - Tag - Qi&#39;s Blog</title>
+        <link>https://tony-laoshi.github.io/tags/cvmat/</link>
+        <description>cv::Mat - Tag - Qi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 14 Jul 2022 19:31:48 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/tags/cvmat/" rel="self" type="application/rss+xml" /><item>
+    <title>Opencv图像数据类型</title>
+    <link>https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</link>
+    <pubDate>Thu, 14 Jul 2022 19:31:48 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/opencv%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</guid>
+    <description><![CDATA[数据类型的形式 数据类型的形式一般为CV_&lt;bit_depth&gt;(S|U|F)C&lt;number_of_channels&gt]]></description>
+</item>
+</channel>
+</rss>
