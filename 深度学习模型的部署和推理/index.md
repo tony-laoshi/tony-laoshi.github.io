@@ -308,8 +308,7 @@ int main(int argc, char** argv) {
 ```
 <br/>
 
-若感兴趣完整的推理过程，可以直接在我的[仓库]()，获取测试用的代码（C++, Python都有），以及已经保存好为onnx格式的网络模型。[
-](https://github.com/tony-laoshi/AnyNet)
+若感兴趣完整的推理过程，可以直接在我的[仓库](https://github.com/tony-laoshi/AnyNet)，获取测试用的代码（C++, Python都有），以及已经保存好为onnx格式的网络模型。
 <br/>
 <br/>
 <br/>
