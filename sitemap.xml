@@ -2,12 +2,15 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://tony-laoshi.github.io/categories/</loc><lastmod>2022-07-14T20:10:34&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/categories/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/posts/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/tags/slam/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/categories/slam/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/tags/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/towards-robust-indoor-vision-slam-and-dense-reconstruction-for-mobile-robots-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://tony-laoshi.github.io/categories/cnn/</loc><lastmod>2022-07-14T20:10:34&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://tony-laoshi.github.io/tags/cnn-onnx-runtime/</loc><lastmod>2022-07-14T20:10:34&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://tony-laoshi.github.io/posts/</loc><lastmod>2022-07-14T20:10:34&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://tony-laoshi.github.io/</loc><lastmod>2022-07-14T20:10:34&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://tony-laoshi.github.io/tags/</loc><lastmod>2022-07-14T20:10:34&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://tony-laoshi.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E6%8E%A8%E7%90%86/</loc><lastmod>2022-07-14T20:10:34&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://tony-laoshi.github.io/categories/opencv/</loc><lastmod>2022-07-14T19:32:08&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://tony-laoshi.github.io/opencv-sgbm%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/</loc><lastmod>2022-07-14T19:32:08&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
