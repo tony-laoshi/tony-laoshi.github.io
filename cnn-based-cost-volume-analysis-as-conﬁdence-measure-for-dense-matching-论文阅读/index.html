@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读 - Qi&#39;s Blog</title><meta name="Description" content="SLAM, opencv, c&#43;&#43;, CNN, 深度学习, pytorch, ubuntu"><meta property="og:title" content="CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读" />
+<meta property="og:description" content="Max Mehltretter, Christian Heipke; Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV), 2019, pp. 0-0 什么是置信度？ 置信度能够识别密集立体匹配中的错误的视差分配（视差估计），对错误的视差估计的一种度量。因此被" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" /><meta property="og:image" content="https://tony-laoshi.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-08-22T16:39:43+08:00" />
+<meta property="article:modified_time" content="2022-08-22T16:39:43+08:00" /><meta property="og:site_name" content="Qi&#39;s Blog" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tony-laoshi.github.io/logo.png"/>
+
+<meta name="twitter:title" content="CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读"/>
+<meta name="twitter:description" content="Max Mehltretter, Christian Heipke; Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV), 2019, pp. 0-0 什么是置信度？ 置信度能够识别密集立体匹配中的错误的视差分配（视差估计），对错误的视差估计的一种度量。因此被"/>
+<meta name="application-name" content="我的网站">
+<meta name="apple-mobile-web-app-title" content="我的网站"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" /><link rel="prev" href="https://tony-laoshi.github.io/towards-robust-indoor-vision-slam-and-dense-reconstruction-for-mobile-robots-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/tony-laoshi.github.io\/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB\/"
+        },"genre": "posts","keywords": "Confidence Estimation","wordcount":  1611 ,
+        "url": "https:\/\/tony-laoshi.github.io\/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB\/","datePublished": "2022-08-22T16:39:43+08:00","dateModified": "2022-08-22T16:39:43+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Qi"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Qi&#39;s Blog">HOME</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Qi&#39;s Blog">HOME</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Qi</a></span>&nbsp;<span class="post-category">included in <a href="/categories/confidence-estimation/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Confidence Estimation</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-08-22">2022-08-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1611 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;<span id="/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="leancloud_visitors" data-flag-title="CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读">
+                        <i class="far fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+            </div><div class="content" id="content"><ul>
+<li><a href="https://openaccess.thecvf.com/content_ICCVW_2019/html/3DRW/Mehltretter_CNN-Based_Cost_Volume_Analysis_as_Confidence_Measure_for_Dense_Matching_ICCVW_2019_paper.html" target="_blank" rel="noopener noreffer "><strong><em>Max Mehltretter, Christian Heipke</em></strong>; Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV), 2019, pp. 0-0</a>
+<br />
+<br />
+<br />
+<br /></li>
+</ul>
+<h1 id="什么是置信度">什么是置信度？</h1>
+<p>置信度能够识别密集立体匹配中的错误的视差分配（视差估计），对错误的视差估计的一种度量。因此被广泛利用于自动驾驶（需要高度信心作为强制性前提）。</p>
+<ul>
+<li>近年来，基于深度学习的置信度估计方法在该领域表现亮眼，但是这些方法大多仅仅依赖于从视差图中学习特征而不考虑3D代价量。</li>
+<li>而这些3D代价量是已被证明，如果被利用起来（相当于利用了额外的信息）是可以进一步的提高估计精度的。</li>
+</ul>
+<p><strong>因此，该论文工作中，提出了一种新的CNN结构，能够从3D代价量中直接学习用于置信度估计的特征。</strong>
+<br />
+<br />
+<br />
+<br /></p>
+<h1 id="什么是置信度估计">什么是置信度估计？</h1>
+<ul>
+<li>通过立体匹配获取度信息是摄影测量学和计算机视觉中的经典任务。密集立体匹配是确定图像对中的每个或大多数像素的深度。原则上，深度重建可以被解释为透视投影的逆操作，这直接导致了该任务的主要困难：将3D场景投影到2D图像平面会导致降维。因此，逆运算一般没有唯一解，其特征是不适定。</li>
+<li>然而，为了确定解决方案，识别一对图像中的两个像素的对应关系通常是先决条件（左图中p像素在右图中何处）。也就是视差估计的过程。</li>
+<li>考虑到视差估计的可靠性。特别是在具有挑战性的条件下（纹理不够，相机移动快，图像质量不好等），深度重建方法可能无法识别所有像素的正确对应。<strong>通俗来说，就是视差估计得不准，存在不确定性，那么度量出这种不确定性的任务就是置信度估计。</strong>
+<br />
+<br />
+<br />
+<br /></li>
+</ul>
+<h1 id="置信度估计分类">置信度估计分类</h1>
+<p>从原理上置信度估计的方法可以被分为三类：</p>
+<ol>
+<li>基于单独的、人手工制作的特征（特征曲线、左右视差估计一致性、像素在其本地领域的独特性）；</li>
+<li>结合 1 中的某些特征来构造更鲁棒、准确的测量；</li>
+<li>把整个任务都映射到CNN中（用深度学习来估计）；</li>
+</ol>
+<p>分析不同的CNN-based的工作中的优点，有两个要点是值得注意的：</p>
+<ol>
+<li><strong>从代价量构造的特征表现出优越的性能</strong></li>
+<li><strong>学习的特征胜过手工制作的特征</strong></li>
+</ol>
+<p>有工作将这两个假设结合起来，从代价量中学习得到特征。虽然他们提出了不同的方法，但都包含一个预处理步骤来提取数据的子集，这些数据作为输入提供给他们的网络。他们指出，这样的预处理是必要的，因为原始成本量的成本分布通常不允许区分正确和不正确的估计。然而，所提出的预处理步骤限制了置信度估计步骤所提供的信息。这就阻止了该方法在成本量上充分利用学习特性的潜力。
+<br />
+<br />
+<br />
+<br /></p>
+<h1 id="基于代价量的置信度估计">基于代价量的置信度估计</h1>
+<p>基于代价量的置信度估计可以被认为是对 volumetric 3D data 的回归任务，因为它是单位间隔内实数的预测。在文献中，主要存在两种类型的方法来处理体积3D数据：</p>
+<ul>
+<li>基于投影的方法</li>
+<li>基于体素的处理</li>
+</ul>
+<p>前者基于使用完善的网络体系结构将3D数据投影到一个或多个2D图像并在2D中应用分类的想法。得益于对2D图像分类的广泛研究，与基于体素的方法相比，这些方法在许多应用中表现出了卓越的性能。但是，他们主要根据对象的形状和表面对样本进行分类。对于当前评估代价量的任务，这是不合理的，因为这些代价量始终具有相同的形状，并且仅各个小体素中的值会变化。<br />基于体素的方法，直接从3D代价量学习特征，但是具有更高复杂性和更大内存消耗。
+<br />
+<br />
+<br />
+<br /></p>
+<h1 id="基于-cnn-的代价量分析">基于 CNN 的代价量分析</h1>
+<p>这项工作中提出的方法的主要思想是根据相应的代价量逐个像素地评估视差图的置信度。<br />3D代价量的 x 和 y 轴对应于图像坐标，而视差轴 z 表示相关的成本曲线。一般来说，可以在成本曲线上观察到典型特征，与它们的来源无关：在理想情况下，成本曲线包含一个唯一的最小值，成本为零，而所有其他值都处于最大值（图 a）。然而，在实践中，成本曲线通常有几个局部最小值，需要放宽理论假设。置信度高的视差估计的特征是明确且明确的全局最小值（图b）。相反，如果无法识别明显的全局最小值（图 c）或全局最小值宽且平坦（图 2d），则通常会分配低置信度，从而使正确对应的定位不准确。
+<br /></p>
+<div align=center><img src="/posts/Conﬁdence_Measure_for_Dense_Matching/cost_curve.png" width="  "></div>
+<p><br />代价曲线高度依赖于所使用的立体匹配方法。因此，统一的数据表示是直接从 3D 代价量学习估计置信度的先决条件。为此，方法的结果空间用于标准化成本量。结果是该范围内的实值的3D张量 [0,1]。</p>
+<h1 id="网络框架">网络框架</h1>
+<div align=center><img src="/posts/Conﬁdence_Measure_for_Dense_Matching/network.png" width="  "></div>
+<br />
+<br />
+<p><strong>更多详细信息请看论文原文</strong></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-08-22</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-title="CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读" data-hashtags="Confidence Estimation"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-hashtag="Confidence Estimation"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-title="CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-title="CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-title="CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/confidence-estimation/">Confidence Estimation</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/towards-robust-indoor-vision-slam-and-dense-reconstruction-for-mobile-robots-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="prev" rel="prev" title="Towards Robust Indoor Vision SLAM and Dense Reconstruction for Mobile Robots 论文阅读"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Towards Robust Indoor Vision SLAM and Dense Reconstruction for Mobile Robots 论文阅读</a></div>
+</div>
+
+
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.101.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Qi</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+
+            <span id="busuanzi_container_site_pv">
+                本站访问量：<span id="busuanzi_value_site_pv"></span>次
+            </span>
+
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"valine":{"appId":"xxx","appKey":"xxx","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@14.0.0/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

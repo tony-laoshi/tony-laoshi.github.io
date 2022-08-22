@@ -3,7 +3,7 @@
 
 
 # 相关链接
-标题：Towards Robust Indoor Vision SLAM and Dense Reconstruction for Mobile Robots  
+标题：[Towards Robust Indoor Vision SLAM and Dense Reconstruction for Mobile Robots](https://www.proquest.com/openview/44ddca893efd1a1de6cf35a7eabe42a6/1?pq-origsite=gscholar&cbl=2037681) 
 作者：Zhang, W; Wang, S; Haala, N.   
 来源：ISPRS Annals of the Photogrammetry, Remote Sensing and Spatial Information Sciences; Gottingen Vol. V-1-2022,  (2022): 211-219.  
 DOI：10.5194/isprs-annals-V-1-2022-211-2022
@@ -42,16 +42,16 @@ DOI：10.5194/isprs-annals-V-1-2022-211-2022
 
 在室内环境中移动时，移动机器人需要依靠稠密的 3D 地图进行导航和避障。 作者使用深度相机来获取3D信息，因为现成的深度相机系统变得越来越可靠。 此外，深度相机在无纹理的室内场景中是有益的，因为它提供了用于对齐的几何信息。 简单地累积所有帧的深度点云将导致大量的信息冗余，因为相邻帧的观测结果大部分重叠。 为此，作者选择 TSDF 作为稠密 3D 地图的表示。这是一种基于体素的表示。 落入同一体素的 3D 点会被融合。 在减少冗余的同时，通过加权平均将观察噪声的影响降至最低。作者在特定时间窗口内构建分离的 TSDF 子图，这些子图可以在几何上相互对齐，为全局束调整（global BA）提供额外的约束。 结果，累积的姿势漂移可以通过闭合的长期循环来减轻。 与密集的光流约束相比，由于显着的视角和基线偏差可能会错过潜在的闭环，子图配准不受视角变化的限制，并且可以在几何上稳健地对齐地图。
 
-![image.png](/images/test1.png "a) 白墙前的摄像头跟踪失败； b) 与车轮里程计测量融合后的平滑跟踪；c) 因错过大基线回环闭合而被错位污染的重建地图； d) 改进了带有子图配准的密集地图。")
+![image.png](/posts/Robust_Indoor_Vision_SLAM/test1.png "a) 白墙前的摄像头跟踪失败； b) 与车轮里程计测量融合后的平滑跟踪；c) 因错过大基线回环闭合而被错位污染的重建地图； d) 改进了带有子图配准的密集地图。")
 
 
 作者还提出了一个深度图细化策略（depth map reﬁnement strategy），以提高密集重建的准确性和完整性。 观察误差相对于深度范围呈二次方增加。 在进行远距离观测时，深度测量会受到明显的观测噪声的影响，这会导致重建地图中出现大量重影和伪影，从而影响地图精度和机器人导航。 为了提高深度图质量，我们使用来自 SLAM 后端的全局 BA 的现成结果。 关键帧的优化深度图（在SLAM后端全局BA获得的深度图被成为优化深度图）受益于相邻帧之间光流的密集匹配，并且由于增加信息的联合优化而具有更高的精度。 根据 degree of over-determination，可以得出每个优化深度像素的置信度值$\omega$，在此基础上优化深度（optimized depth）与原始传感器深度自适应融合。 此外，我们应用双边求解器来增强传感器深度图的平滑度，它利用彩色图像中的外观信息来保持物体边缘的清晰度，同时平滑物体表面上的测量值（这里的意思是深度相机直接获得的深度图成为原始传感器深度，这个深度图经过一个双边求解器来增强深度图的平滑度，这样就得到了一个平滑后的深度图，用这个平滑后的深度图与在SLAM后端全局BA获得的优化深度图进行一个自适应融合，得到最终的细化深度图，融合方案如下公式所示）。
 
-<div align=center><img src="/images/formular.png" width="  "></div>
+<div align=center><img src="/posts/Robust_Indoor_Vision_SLAM/formular.png" width="  "></div>
 <br/>
 
 
-![image.png](/images/test2.png "从左到右：彩色图像、传感器深度图、平滑后深度图、优化的深度图和最终自适应融合后的深度图。有改进的地方和有所改善的区域用红色矩形标记")
+![image.png](/posts/Robust_Indoor_Vision_SLAM/test2.png "从左到右：彩色图像、传感器深度图、平滑后深度图、优化的深度图和最终自适应融合后的深度图。有改进的地方和有所改善的区域用红色矩形标记")
 
 
 # 主要贡献总结
