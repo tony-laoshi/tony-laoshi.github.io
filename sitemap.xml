@@ -2,13 +2,17 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://tony-laoshi.github.io/categories/</loc><lastmod>2022-08-22T16:39:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</loc><lastmod>2022-08-22T16:39:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://tony-laoshi.github.io/tags/confidence-estimation/</loc><lastmod>2022-08-22T16:39:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://tony-laoshi.github.io/categories/confidence-estimation/</loc><lastmod>2022-08-22T16:39:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://tony-laoshi.github.io/posts/</loc><lastmod>2022-08-22T16:39:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://tony-laoshi.github.io/</loc><lastmod>2022-08-22T16:39:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://tony-laoshi.github.io/tags/</loc><lastmod>2022-08-22T16:39:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</loc><lastmod>2022-09-28T17:32:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/categories/</loc><lastmod>2022-09-28T17:32:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/tags/dense-stereo-matching/</loc><lastmod>2022-09-28T17:32:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/categories/dense-stereo-matching/</loc><lastmod>2022-09-28T17:32:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/posts/</loc><lastmod>2022-09-28T17:32:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/</loc><lastmod>2022-09-28T17:32:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/tags/</loc><lastmod>2022-09-28T17:32:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/tags/confidence-estimation/</loc><lastmod>2022-09-28T16:49:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/categories/confidence-estimation/</loc><lastmod>2022-09-28T16:49:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/aleatoric-uncertainty-estimation-for-dense-stereo-matching-via-cnn-based-cost-volume-analysis-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</loc><lastmod>2022-09-28T16:49:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</loc><lastmod>2022-08-22T16:39:43&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>https://tony-laoshi.github.io/tags/slam/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>https://tony-laoshi.github.io/categories/slam/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>https://tony-laoshi.github.io/towards-robust-indoor-vision-slam-and-dense-reconstruction-for-mobile-robots-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</loc><lastmod>2022-07-15T17:28:41&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>

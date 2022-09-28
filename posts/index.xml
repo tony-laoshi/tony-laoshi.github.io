@@ -3,7 +3,23 @@
         <title>All Posts - Qi&#39;s Blog</title>
         <link>https://tony-laoshi.github.io/posts/</link>
         <description>All Posts | Qi&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 22 Aug 2022 16:39:43 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 28 Sep 2022 17:32:10 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读</title>
+    <link>https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
+    <pubDate>Wed, 28 Sep 2022 17:32:10 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</guid>
+    <description><![CDATA[简介 在移动设备比如移动机器人，无人汽车上双目深度估计通常被期望能够在有限的计算资源下实时的估计出精确的视差图。现在的许多基于深度学习的双目深]]></description>
+</item>
+<item>
+    <title>Aleatoric Uncertainty Estimation for Dense Stereo Matching via CNN Based Cost Volume Analysis 论文阅读</title>
+    <link>https://tony-laoshi.github.io/aleatoric-uncertainty-estimation-for-dense-stereo-matching-via-cnn-based-cost-volume-analysis-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
+    <pubDate>Wed, 28 Sep 2022 16:49:43 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/aleatoric-uncertainty-estimation-for-dense-stereo-matching-via-cnn-based-cost-volume-analysis-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</guid>
+    <description><![CDATA[https://www.researchgate.net/publication/346096130_Aleatoric_Uncertainty_Estimation_for_Dense_Stereo_Matching_via_CNN-based_Cost_Volume_Analysis 摘要 在上篇文章中，我们知道了可以通过去分析 cost volume 来估计 confidence。得到的confidence map每一个像素是一个confiden]]></description>
+</item>
+<item>
     <title>CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读</title>
     <link>https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
     <pubDate>Mon, 22 Aug 2022 16:39:43 &#43;0800</pubDate>
@@ -66,22 +82,6 @@
     <author>Qi</author>
     <guid>https://tony-laoshi.github.io/pcl%E5%BA%93%E5%9C%A8ubuntu20.04%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85/</guid>
     <description><![CDATA[前言 pcl库的编译安装真心让人想吐，运气好一次通过，运气不好（各种环境的、各种依赖的问题）两三天就过去了。在这里分享下我安装pcl所遇到的问]]></description>
-</item>
-<item>
-    <title>Ubuntu20.04安装LaTeX并配置中文环境</title>
-    <link>https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/</link>
-    <pubDate>Thu, 30 Jun 2022 20:40:06 &#43;0800</pubDate>
-    <author>Qi</author>
-    <guid>https://tony-laoshi.github.io/ubuntu20.04%E5%AE%89%E8%A3%85latex%E5%B9%B6%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83/</guid>
-    <description><![CDATA[简介 Latex是一个基于TEX的排班系统。粘贴复制的话就不搞了。简而言之，通俗来说，就是用来写文章的，而且完全不需要你去花时间去自己考虑排版]]></description>
-</item>
-<item>
-    <title>Ubuntu安装卸载基础知识</title>
-    <link>https://tony-laoshi.github.io/ubuntu%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
-    <pubDate>Thu, 30 Jun 2022 16:54:31 &#43;0800</pubDate>
-    <author>Qi</author>
-    <guid>https://tony-laoshi.github.io/ubuntu%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
-    <description><![CDATA[APT软件包管理系统 apt-get install apt一般直接安装已经编译好的可执行文件，会直接帮你处理依赖关系，apt-get install安装目录是包的维护者确]]></description>
 </item>
 </channel>
 </rss>

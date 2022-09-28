@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读 - Qi&#39;s Blog</title><meta name="Description" content="SLAM, opencv, c&#43;&#43;, CNN, 深度学习, pytorch, ubuntu"><meta property="og:title" content="Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读" />
+<meta property="og:description" content="简介 在移动设备比如移动机器人，无人汽车上双目深度估计通常被期望能够在有限的计算资源下实时的估计出精确的视差图。现在的许多基于深度学习的双目深" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" /><meta property="og:image" content="https://tony-laoshi.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-09-28T17:32:10+08:00" />
+<meta property="article:modified_time" content="2022-09-28T17:32:10+08:00" /><meta property="og:site_name" content="Qi&#39;s Blog" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tony-laoshi.github.io/logo.png"/>
+
+<meta name="twitter:title" content="Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读"/>
+<meta name="twitter:description" content="简介 在移动设备比如移动机器人，无人汽车上双目深度估计通常被期望能够在有限的计算资源下实时的估计出精确的视差图。现在的许多基于深度学习的双目深"/>
+<meta name="application-name" content="我的网站">
+<meta name="apple-mobile-web-app-title" content="我的网站"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" /><link rel="prev" href="https://tony-laoshi.github.io/aleatoric-uncertainty-estimation-for-dense-stereo-matching-via-cnn-based-cost-volume-analysis-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/tony-laoshi.github.io\/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB\/"
+        },"genre": "posts","keywords": "Dense Stereo Matching","wordcount":  1229 ,
+        "url": "https:\/\/tony-laoshi.github.io\/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB\/","datePublished": "2022-09-28T17:32:10+08:00","dateModified": "2022-09-28T17:32:10+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Qi"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Qi&#39;s Blog">HOME</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Qi&#39;s Blog">HOME</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Qi</a></span>&nbsp;<span class="post-category">included in <a href="/categories/dense-stereo-matching/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Dense Stereo Matching</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-09-28">2022-09-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1229 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;<span id="/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="leancloud_visitors" data-flag-title="Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读">
+                        <i class="far fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#结论">结论</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="简介">简介</h1>
+<p>在移动设备比如移动机器人，无人汽车上双目深度估计通常被期望能够在有限的计算资源下实时的估计出精确的视差图。现在的许多基于深度学习的双目深度估计的工作都需要在计算结果精度与整体效率之间做出权衡，而且网络参数很多。面对这些短板，AnyNet 可以在推理时权衡效率和准确性。深度估计是分阶段进行的，在此期间可以随时查询模型以输出其当前的最佳估计。
+<br/>
+<br/>
+<br/>
+<br/></p>
+<h1 id="介绍">介绍</h1>
+<p>使用CNN来预测视差图时的计算复杂度通常和图像的分辨率成三次方，以及与所考虑的最大视差成线性关系。所以我们就保持足够低的图像分辨率和最大视差范围，连续的细化深度图，以确保最小的计算时间。</p>
+<p>首先以最低分辨率（1/16的原分辨率）at full disparity range 估计视差图，这个阶段通常在几毫秒内就能完成。然后从低分辨率开始，通过上采样和随后纠正在更高分辨率下明显的错误来连续提高视差图的分辨率。通过使用 CNN 预测来自输入图像的上采样视差图的残差来执行校正。尽管使用了更高的分辨率，但这些更新仍然很快，因为可以假设剩余视差限制在几个像素内，从而允许我们将最大视差和相关计算限制在整个范围的仅 10 -20%。这些连续的更新完全避免了全范围视差计算，但最初的低分辨率设置，并确保所有计算都被重复使用。可以随时对我们的算法进行轮询，以检索当前最佳估计的深度图。可以获得广泛的可能帧速率 (英伟达TX2上的10-35FPS)，同时在高延迟设置中仍保留准确的视差估计
+<br/>
+<br/>
+<br/>
+<br/></p>
+<h1 id="网络结构">网络结构</h1>
+<div align=center><img src="/posts/anynet/network.png" width="  "></div>
+<ul>
+<li>首先通过U-Net（U-Net feature extractor），在输入的一对图像中进行特征提取，分别在不同的几个分辨率下(1/16, 1/8, 1/4) 输出特征图。在stage1，只有最低分辨率的特征图（1/16）被输入到Disparity Net以产生一个低分辨率的视差图。由于低分辨率输入，整个第一阶段计算只需要几毫秒。</li>
+<li>如果允许更多的计算时间，我们进入stage2，继续通过U-Net获得分辨率稍大（1/8,）的特征图。在stage2中，我们无需用刚得到的具有更高分辨率的特征图重新计算完整的视差图，而是简单地校正了stage1中已经计算出的视差图。首先，我们放大视差图（up-scale）以匹配stage2的分辨率。然后，我们计算一个残差图，其中包含小的校正，这些校正指定每个像素应增加或减少多少。</li>
+<li>如果时间允许，进入stage3，过程类似stage2 ，并将分辨率再次从 1/8 倍增至 1/4。</li>
+<li>Stage4 使用 SPNet 改进stage3的视差图。
+<br/>
+<br/>
+<br/>
+<br/></li>
+</ul>
+<h1 id="实验与结论">实验与结论</h1>
+<div align=center><img src="/posts/anynet/results.png" width="  "></div>
+<ul>
+<li>对照组：StereoNet、PSMNet、传统双目估计算法（OpenCV）</li>
+<li>实验组：StereoNet
+<br/>
+<br/>
+<br/>
+<br/></li>
+</ul>
+<h2 id="结论">结论</h2>
+<ul>
+<li>只有 AnyNet 和 StereoNet 能够以≥30 FPS （GPU：英伟达TX2）的速度进行快速实时预测，并且 AnyNet 在两个数据集上的错误率都大大降低。</li>
+<li>即使使用全分辨率输入，AnyNet 也能够以超过 10 FPS 的速度运行，并且在每个可能的推理时间范围内，AnyNet 在预测误差方面明显优于所有对照组。</li>
+<li>PSMNet 能够产生总体上最准确的结果，但这仅适用于 1 FPS 或更慢的计算速率。</li>
+<li>相比较之下非基于 CNN 的方法 OpenCV 在任何推理时间范围内都没有竞争力。</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-09-28</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-title="Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读" data-hashtags="Dense Stereo Matching"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-hashtag="Dense Stereo Matching"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-title="Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-title="Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" data-title="Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/dense-stereo-matching/">Dense Stereo Matching</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/aleatoric-uncertainty-estimation-for-dense-stereo-matching-via-cnn-based-cost-volume-analysis-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="prev" rel="prev" title="Aleatoric Uncertainty Estimation for Dense Stereo Matching via CNN Based Cost Volume Analysis 论文阅读"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Aleatoric Uncertainty Estimation for Dense Stereo Matching via CNN Based Cost Volume Analysis 论文阅读</a></div>
+</div>
+
+
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.104.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Qi</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+
+            <span id="busuanzi_container_site_pv">
+                本站访问量：<span id="busuanzi_value_site_pv"></span>次
+            </span>
+
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"valine":{"appId":"xxx","appKey":"xxx","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@14.0.0/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

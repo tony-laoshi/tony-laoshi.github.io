@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Dense Stereo Matching - Category - Qi&#39;s Blog</title>
+        <link>https://tony-laoshi.github.io/categories/dense-stereo-matching/</link>
+        <description>Dense Stereo Matching - Category - Qi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 28 Sep 2022 17:32:10 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/categories/dense-stereo-matching/" rel="self" type="application/rss+xml" /><item>
+    <title>Anytime Stereo Image Depth Estimation on Mobile Devices 论文阅读</title>
+    <link>https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
+    <pubDate>Wed, 28 Sep 2022 17:32:10 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/anytime-stereo-image-depth-estimation-on-mobile-devices-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</guid>
+    <description><![CDATA[简介 在移动设备比如移动机器人，无人汽车上双目深度估计通常被期望能够在有限的计算资源下实时的估计出精确的视差图。现在的许多基于深度学习的双目深]]></description>
+</item>
+</channel>
+</rss>

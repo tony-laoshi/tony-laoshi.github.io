@@ -1,9 +1,17 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Confidence Estimation - Category - Qi&#39;s Blog</title>
+        <title> Confidence Estimation - Category - Qi&#39;s Blog</title>
         <link>https://tony-laoshi.github.io/categories/confidence-estimation/</link>
-        <description>Confidence Estimation - Category - Qi&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 22 Aug 2022 16:39:43 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/categories/confidence-estimation/" rel="self" type="application/rss+xml" /><item>
+        <description> Confidence Estimation - Category - Qi&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 28 Sep 2022 16:49:43 &#43;0800</lastBuildDate><atom:link href="https://tony-laoshi.github.io/categories/confidence-estimation/" rel="self" type="application/rss+xml" /><item>
+    <title>Aleatoric Uncertainty Estimation for Dense Stereo Matching via CNN Based Cost Volume Analysis 论文阅读</title>
+    <link>https://tony-laoshi.github.io/aleatoric-uncertainty-estimation-for-dense-stereo-matching-via-cnn-based-cost-volume-analysis-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
+    <pubDate>Wed, 28 Sep 2022 16:49:43 &#43;0800</pubDate>
+    <author>Qi</author>
+    <guid>https://tony-laoshi.github.io/aleatoric-uncertainty-estimation-for-dense-stereo-matching-via-cnn-based-cost-volume-analysis-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</guid>
+    <description><![CDATA[https://www.researchgate.net/publication/346096130_Aleatoric_Uncertainty_Estimation_for_Dense_Stereo_Matching_via_CNN-based_Cost_Volume_Analysis 摘要 在上篇文章中，我们知道了可以通过去分析 cost volume 来估计 confidence。得到的confidence map每一个像素是一个confiden]]></description>
+</item>
+<item>
     <title>CNN Based Cost Volume Analysis as Conﬁdence Measure for Dense Matching 论文阅读</title>
     <link>https://tony-laoshi.github.io/cnn-based-cost-volume-analysis-as-con%EF%AC%81dence-measure-for-dense-matching-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
     <pubDate>Mon, 22 Aug 2022 16:39:43 &#43;0800</pubDate>
